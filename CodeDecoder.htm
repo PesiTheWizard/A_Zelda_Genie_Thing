@@ -1,0 +1,81 @@
+<html>
+<head>
+<title>Game Genie says what?
+</title>
+<script src="GGfuns.js"></script>
+<script>
+function decoder()
+{
+	const inp = document.getElementById("ts").value.toUpperCase();
+	const il = inp.length;
+	if(il===6 || il===8)
+	{
+		let interm = new Array(il);
+		for(let i=0;i<il;i++)
+		{
+			interm[i] = translate(inp[i]);
+			if(interm[i] === -1)
+			{
+				document.getElementById("ms").innerHTML = inp[i]+" is not valid";
+				return;
+			}
+		}
+		let outp = new Array(il);
+		outp[0] = (interm[2]&8)|(interm[3]&7);
+		outp[1] = (interm[4]&8)|(interm[5]&7);
+		outp[2] = (interm[1]&8)|(interm[2]&7);
+		outp[3] = (interm[3]&8)|(interm[4]&7);
+		const decaddress = (outp[0]<<12)|(outp[1]<<8)|(outp[2]<<4)|outp[3];
+		const hexaddress = "(0x".concat(decaddress.toString(16).toUpperCase(),")");
+		let retval = null;
+		let condst = "";
+		if(il===6)
+		{
+			outp[4] = (interm[0]&8)|(interm[1]&7);
+			outp[5] = (interm[5]&8)|(interm[0]&7);
+			retval = (outp[4]<<4)|outp[5];
+		}
+		else//il = 8
+		{
+			outp[4] = (interm[6]&8)|(interm[7]&7);
+			outp[5] = (interm[5]&8)|(interm[6]&7);
+			outp[6] = (interm[0]&8)|(interm[1]&7);
+			outp[7] = (interm[7]&8)|(interm[0]&7);
+			retval = (outp[6]<<4)|outp[7];
+			const condval = (outp[4]<<4)|outp[5];
+			condst = " if it was ".concat(condval,"(0x",condval.toString(16).toUpperCase(),")");
+		}
+		const retHexString = "(0x".concat(retval.toString(16).toUpperCase(),")");
+		document.getElementById("ms").innerHTML = inp+":<br>Reads to address "+decaddress+hexaddress+" return "+retval+retHexString+condst;
+	}
+	else
+	{document.getElementById("ms").innerHTML = "Wrong code length";}
+}
+function encodeFromTop()
+{
+	const tmat = parseInt(document.getElementById("ma").value,16);
+	const tovt = parseInt(document.getElementById("ov").value,16);
+	const tnvt = parseInt(document.getElementById("nv").value,16);
+	if(isNaN(tmat) || isNaN(tnvt) || isNaN(tovt))
+	{
+		document.getElementById("gms").innerHTML = "number fail";
+		return;
+	}
+	const GGGC = encoder(tmat,tovt,tnvt);
+	document.getElementById("gms").innerHTML = "Address "+tmat+"(0x"+tmat.toString(16).toUpperCase()+") returning "+tnvt+"(0x"+tnvt.toString(16).toUpperCase()+") if it was "+tovt+"(0x"+tovt.toString(16).toUpperCase()+"):<br>"+GGGC;
+}
+</script>
+</head>
+<body>
+<input type=text maxlength=8 id="ts"> <input type=button value="Code does what?" onClick=decoder()><br>
+<span id="ms">...</span>
+<hr>
+<pre>
+Memory address(hex):<input type=text maxlength=4 id="ma">
+New value(hex):     <input type=text maxlength=2 id="nv">
+Old value(hex):     <input type=text maxlength=2 id="ov">
+<input type=button value="Generate code" onClick=encodeFromTop()>
+</pre>
+<span id="gms">...</span>
+</body>
+</html>
