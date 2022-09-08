@@ -60,25 +60,66 @@ function set0KeyGen()
 		parseInt(document.getElementById("set0Zola").value) +
 		parseInt(document.getElementById("set0OceanSound").value) +
 		parseInt(document.getElementById("set0Palette").value);
-	alert("set-0 key:\n\n"+s0k);
+	loadIndKey(0,s0k);
 }
 function set1KeyGen()
 {
 	const s1k = (parseInt(document.getElementById("set1Dest").value,16)<<2) +
 		parseInt(document.getElementById("set1Palette").value);
-	alert("set-1 key:\n\n"+s1k);
+	loadIndKey(1,s1k);
 }
 function set2KeyGen()
 {
-	console.log("set 2 Key Gen");
+	const s2k = (parseInt(document.getElementById("set2Quantity").value)<<6) +
+		parseInt(document.getElementById("set2Enemy").value,16);
+	loadIndKey(2,s2k);
 }
 function set3KeyGen()
 {
-	console.log("set 3 Key Gen");
+	const s3k = parseInt(document.getElementById("set3Mixed").value,16) +
+		parseInt(document.getElementById("set3Screen").value,16);
+	loadIndKey(3,s3k);
 }
 function set4KeyGen()
 {
-	console.log("set 4 Key Gen");
+	const s4k = (parseInt(document.getElementById("set4Open").value)<<6) +
+		(parseInt(document.getElementById("set4StairsPos").value)<<4) +
+		parseInt(document.getElementById("set4Edge").value) +
+		parseInt(document.getElementById("set4VtPos").value);
+	loadIndKey(4,s4k);
+}
+function loadIndKey(S,K)
+{
+	document.getElementById("OWpstc").selectedIndex = S;
+	document.getElementById("OWnewKey").selectedIndex = K;
+}
+function loadOWdefaults()
+{
+	const OW_ScOffs = parseInt(document.getElementById("OWscreenCol").value,16) + parseInt(document.getElementById("OWscreenRow").value,16);
+	const OWd0 = OWpropertiesTables[0][OW_ScOffs];
+	const OWd1 = OWpropertiesTables[1][OW_ScOffs];
+	const OWd2 = OWpropertiesTables[2][OW_ScOffs];
+	const OWd3 = OWpropertiesTables[3][OW_ScOffs];
+	const OWd4 = OWpropertiesTables[4][OW_ScOffs];
+
+	document.getElementById("set0HzPos").selectedIndex = (OWd0>>4);
+	document.getElementById("set0Zola").selectedIndex = (OWd0>>3)&1;
+	document.getElementById("set0OceanSound").selectedIndex = (OWd0>>2)&1;
+	document.getElementById("set0Palette").selectedIndex = OWd0&3;
+
+	document.getElementById("set1Dest").selectedIndex = (OWd1>>2)&63;
+	document.getElementById("set1Palette").selectedIndex = OWd1&3;
+
+	document.getElementById("set2Quantity").selectedIndex = (OWd2>>6)&3;
+	document.getElementById("set2Enemy").selectedIndex = OWd2&63;
+
+	document.getElementById("set3Mixed").selectedIndex = (OWd3>>7)&1;
+	document.getElementById("set3Screen").selectedIndex = OWd3&127;
+
+	document.getElementById("set4Open").selectedIndex = (OWd4>>6)&3;
+	document.getElementById("set4StairsPos").selectedIndex = (OWd4>>4)&3
+	document.getElementById("set4Edge").selectedIndex = (OWd4>>3)&1;
+	document.getElementById("set4VtPos").selectedIndex = OWd4&7;
 }
 </script>
 </head>
@@ -747,7 +788,8 @@ Screen at column <select id="OWscreenCol">
 <option value="253">253</option>
 <option value="254">254</option>
 <option value="255">255</option>
-</select>. <input type=button value="Generate" onClick=overworldChange()>
+</select>. <input type=button value="Generate" onClick=overworldChange()><br>
+<input type=button value="Load defaults" onClick=loadOWdefaults()> of selected screen.
 <fieldset>
 <legend>Overworld properties - set 0</legend>
 Horizontal position out of caves: <select id="set0HzPos">
@@ -782,7 +824,7 @@ Outer color palette: <select id="set0Palette">
 <option value="2">2</option>
 <option value="3">3</option>
 </select><br>
-<input type=button value="Get key" onClick=set0KeyGen()>
+<input type=button value="Set key" onClick=set0KeyGen()>
 </fieldset>
 <fieldset>
 <legend>Overworld properties - set 1</legend>
@@ -797,6 +839,12 @@ Cave destination: <select id="set1Dest">
 <option value="7">Level 7</option>
 <option value="8">Level 8</option>
 <option value="9">Level 9</option>
+<option value="A" disabled>glitchLevelA</option>
+<option value="B" disabled>glitchLevelB</option>
+<option value="C" disabled>glitchLevelC</option>
+<option value="D" disabled>glitchLevelD</option>
+<option value="E" disabled>glitchLevelE</option>
+<option value="F" disabled>glitchLevelF</option>
 <option value="10">Sword cave 1</option>
 <option value="11">Take any one</option>
 <option value="12">Sword cave 2</option>
@@ -824,19 +872,243 @@ Inner color palette: <select id="set1Palette">
 <option value="2">2</option>
 <option value="3">3</option>
 </select><br>
-<input type=button value="Get key" onClick=set1KeyGen()>
+<input type=button value="Set key" onClick=set1KeyGen()>
 </fieldset>
 <fieldset>
 <legend>Overworld properties - set 2</legend>
-I'll finish this later
+Quantity code: <select id="set2Quantity">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Enemy code: <select id="set2Enemy">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+<option value="E">E</option>
+<option value="F">F</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="1A">1A</option>
+<option value="1B">1B</option>
+<option value="1C">1C</option>
+<option value="1D">1D</option>
+<option value="1E">1E</option>
+<option value="1F">1F</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="2A">2A</option>
+<option value="2B">2B</option>
+<option value="2C">2C</option>
+<option value="2D">2D</option>
+<option value="2E">2E</option>
+<option value="2F">2F</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="3A">3A</option>
+<option value="3B">3B</option>
+<option value="3C">3C</option>
+<option value="3D">3D</option>
+<option value="3E">3E</option>
+<option value="3F">3F</option>
+</select><br>
+<input type=button value="Set key" onClick=set2KeyGen()>
 </fieldset>
 <fieldset>
 <legend>Overworld properties - set 3</legend>
-I'll finish this later
+Enemy table: <select id="set3Mixed">
+<option value="00">Normal</option>
+<option value="80">Special</option>
+</select><br>
+Screen code: <select id="set3Screen">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+<option value="E">E</option>
+<option value="F">F</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="1A">1A</option>
+<option value="1B">1B</option>
+<option value="1C">1C</option>
+<option value="1D">1D</option>
+<option value="1E">1E</option>
+<option value="1F">1F</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="2A">2A</option>
+<option value="2B">2B</option>
+<option value="2C">2C</option>
+<option value="2D">2D</option>
+<option value="2E">2E</option>
+<option value="2F">2F</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="3A">3A</option>
+<option value="3B">3B</option>
+<option value="3C">3C</option>
+<option value="3D">3D</option>
+<option value="3E">3E</option>
+<option value="3F">3F</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="4A">4A</option>
+<option value="4B">4B</option>
+<option value="4C">4C</option>
+<option value="4D">4D</option>
+<option value="4E">4E</option>
+<option value="4F">4F</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+<option value="5A">5A</option>
+<option value="5B">5B</option>
+<option value="5C">5C</option>
+<option value="5D">5D</option>
+<option value="5E">5E</option>
+<option value="5F">5F</option>
+<option value="60">60</option>
+<option value="61">61</option>
+<option value="62">62</option>
+<option value="63">63</option>
+<option value="64">64</option>
+<option value="65">65</option>
+<option value="66">66</option>
+<option value="67">67</option>
+<option value="68">68</option>
+<option value="69">69</option>
+<option value="6A">6A</option>
+<option value="6B">6B</option>
+<option value="6C">6C</option>
+<option value="6D">6D</option>
+<option value="6E">6E</option>
+<option value="6F">6F</option>
+<option value="70">70</option>
+<option value="71">71</option>
+<option value="72">72</option>
+<option value="73">73</option>
+<option value="74">74</option>
+<option value="75">75</option>
+<option value="76">76</option>
+<option value="77">77</option>
+<option value="78">78</option>
+</select><br>
+<input type=button value="Set key" onClick=set3KeyGen()>
 </fieldset>
 <fieldset>
 <legend>Overworld properties - set 4</legend>
-I'll finish this later
+Secret availability: <select id="set4Open">
+<option value="0">Both quests</option>
+<option value="1">1st only</option>
+<option value="2">2nd only</option>
+</select><br>
+Stairs position code: <select id="set4StairsPos">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Edge-spawn enemies: <select id="set4Edge">
+<option value="0">No</option>
+<option value="8">Yes</option>
+</select><br>
+Vertical position out of caves: <select id="set4VtPos">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+</select><br>
+<input type=button value="Set key" onClick=set4KeyGen()>
 </fieldset>
 </body>
 </html>
