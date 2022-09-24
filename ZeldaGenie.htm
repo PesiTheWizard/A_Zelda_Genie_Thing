@@ -47,7 +47,8 @@ function lootTableChange()
 function overworldChange()
 {
 	const OW_MemTables = [0x8400,0x8480,0x8500,0x8580,0x8680];
-	const OW_ScOffs = parseInt(document.getElementById("OWscreenCol").value,16) + parseInt(document.getElementById("OWscreenRow").value,16);
+	const OW_ScOffs = parseInt(document.getElementById("OWscreenCol").value,16) +
+		parseInt(document.getElementById("OWscreenRow").value,16);
 	const PSTC = parseInt(document.getElementById("OWpstc").value);
 	const OWmemAddress = OW_MemTables[PSTC]+OW_ScOffs;
 	const OWok = OWpropertiesTables[PSTC][OW_ScOffs];
@@ -95,7 +96,8 @@ function loadIndKey(S,K)
 }
 function loadOWdefaults()
 {
-	const OW_ScOffs = parseInt(document.getElementById("OWscreenCol").value,16) + parseInt(document.getElementById("OWscreenRow").value,16);
+	const OW_ScOffs = parseInt(document.getElementById("OWscreenCol").value,16) +
+		parseInt(document.getElementById("OWscreenRow").value,16);
 	const OWd0 = OWpropertiesTables[0][OW_ScOffs];
 	const OWd1 = OWpropertiesTables[1][OW_ScOffs];
 	const OWd2 = OWpropertiesTables[2][OW_ScOffs];
@@ -171,6 +173,127 @@ function loadCaveDefaults()
 	document.getElementById("Cset2pd").selectedIndex = (Cd2>>7)&1;
 	document.getElementById("Cset2id").selectedIndex = (Cd2>>6)&1;
 	document.getElementById("Cset2ri").selectedIndex = Cd2&63;
+}
+function dungeonChange()
+{
+	const majorOffs = parseInt(document.getElementById("Dquest").value) +
+		parseInt(document.getElementById("Dmap").value) +
+		parseInt(document.getElementById("Dpstc").value);
+	const minorOffs = parseInt(document.getElementById("DscreenRow").value,16) +
+		parseInt(document.getElementById("DscreenCol").value,16);
+	const Dma = 0x8700 + (majorOffs * 0x80) + minorOffs;
+	const Dok = DungeonPropertiesTables[majorOffs][minorOffs];
+	const Dnk = parseInt(document.getElementById("DnewKey").value);
+	alerter(Dma,Dok,Dnk);
+}
+function dungeonSet0KeyGenN()
+{
+	const s0k = (parseInt(document.getElementById("Dset0tw").value)<<5) +
+		(parseInt(document.getElementById("Dset0bw").value)<<2) +
+		parseInt(document.getElementById("Dset0op").value);
+	loadDungeonKey(0,s0k);
+}
+function dungeonSet0KeyGenU()
+{
+	const s0k = parseInt(document.getElementById("Dset0u").value,16) +
+		parseInt(document.getElementById("Dset0lerc").value,16) +
+		parseInt(document.getElementById("Dset0lerr").value,16);
+	loadDungeonKey(0,s0k);
+}
+function dungeonSet1KeyGenN()
+{
+	const s1k = (parseInt(document.getElementById("Dset1lw").value)<<5) +
+		(parseInt(document.getElementById("Dset1rw").value)<<2) +
+		parseInt(document.getElementById("Dset1ip").value);
+	loadDungeonKey(1,s1k);
+}
+function dungeonSet1KeyGenU()
+{
+	const s1k = parseInt(document.getElementById("Dset1u").value,16) +
+		parseInt(document.getElementById("Dset1rerc").value,16) +
+		parseInt(document.getElementById("Dset1rerr").value,16);
+	loadDungeonKey(1,s1k);
+}
+function dungeonSet2KeyGenN()
+{
+	const s2k = (parseInt(document.getElementById("Dset2qc").value)<<6) +
+		parseInt(document.getElementById("Dset2ec").value,16);
+	loadDungeonKey(2,s2k);
+}
+function dungeonSet2KeyGenU()
+{
+	const s2k = parseInt(document.getElementById("Dset2Xp").value,16) +
+		parseInt(document.getElementById("Dset2Yp").value,16);
+	loadDungeonKey(2,s2k);
+}
+function dungeonSet3KeyGen()
+{
+	const s3k = parseInt(document.getElementById("Dset3et").value,16) +
+		parseInt(document.getElementById("Dset3mb").value,16) +
+		parseInt(document.getElementById("Dset3sc").value,16);
+	loadDungeonKey(3,s3k);
+}
+function dungeonSet4KeyGen()
+{
+	const s4k = parseInt(document.getElementById("Dset4d").value,16) +
+		(parseInt(document.getElementById("Dset4bc").value)<<5) +
+		parseInt(document.getElementById("Dset4ri").value,16);
+	loadDungeonKey(4,s4k);
+}
+function dungeonSet5KeyGen()
+{
+	const s5k = (parseInt(document.getElementById("Dset5u1").value)<<6) +
+		(parseInt(document.getElementById("Dset5ipc").value)<<4) +
+		parseInt(document.getElementById("Dset5u2").value) +
+		parseInt(document.getElementById("Dset5saiawc").value) +
+		parseInt(document.getElementById("Dset5me").value) +
+		parseInt(document.getElementById("Dset5sosawc").value);
+	loadDungeonKey(5,s5k);
+}
+function loadDungeonKey(S,K)
+{
+	document.getElementById("Dpstc").selectedIndex = S;
+	document.getElementById("DnewKey").selectedIndex = K;
+}
+function loadDungeonDefaults()
+{
+	const partMajOff = parseInt(document.getElementById("Dquest").value) +
+		parseInt(document.getElementById("Dmap").value);
+	const minorOffs = parseInt(document.getElementById("DscreenRow").value,16) +
+		parseInt(document.getElementById("DscreenCol").value,16);
+	let Dda = new Array(6);
+	for(let i=0;i<6;i++)
+	{
+		Dda[i] = DungeonPropertiesTables[partMajOff+i][minorOffs];
+	}
+	document.getElementById("Dset0tw").selectedIndex = (Dda[0]>>5)&7;
+	document.getElementById("Dset0bw").selectedIndex = (Dda[0]>>2)&7;
+	document.getElementById("Dset0op").selectedIndex = Dda[0]&3;
+	document.getElementById("Dset0u").selectedIndex = (Dda[0]>>7)&1;
+	document.getElementById("Dset0lerc").selectedIndex = Dda[0]&15;
+	document.getElementById("Dset0lerr").selectedIndex = (Dda[0]>>4)&7;
+	document.getElementById("Dset1lw").selectedIndex = (Dda[1]>>5)&7;
+	document.getElementById("Dset1rw").selectedIndex = (Dda[1]>>2)&7;
+	document.getElementById("Dset1ip").selectedIndex = Dda[1]&3;
+	document.getElementById("Dset1u").selectedIndex = (Dda[1]>>7)&1;
+	document.getElementById("Dset1rerc").selectedIndex = Dda[1]&15;
+	document.getElementById("Dset1rerr").selectedIndex = (Dda[1]>>4)&7;
+	document.getElementById("Dset2qc").selectedIndex = (Dda[2]>>6)&3;
+	document.getElementById("Dset2ec").selectedIndex = Dda[2]&(0x3F);
+	document.getElementById("Dset2Xp").selectedIndex = (Dda[2]>>4)&15;
+	document.getElementById("Dset2Yp").selectedIndex = Dda[2]&15;
+	document.getElementById("Dset3et").selectedIndex = (Dda[3]>>7)&1;
+	document.getElementById("Dset3mb").selectedIndex = (Dda[3]>>6)&1;
+	document.getElementById("Dset3sc").selectedIndex = Dda[3]&(0x3F);
+	document.getElementById("Dset4d").selectedIndex = (Dda[4]>>7)&1;
+	document.getElementById("Dset4bc").selectedIndex = (Dda[4]>>5)&3;
+	document.getElementById("Dset4ri").selectedIndex = Dda[4]&(0x1F);
+	document.getElementById("Dset5u1").selectedIndex = (Dda[5]>>6)&3;
+	document.getElementById("Dset5ipc").selectedIndex = (Dda[5]>>4)&3;
+	document.getElementById("Dset5u1").selectedIndex = (Dda[5]>>3)&1;
+	document.getElementById("Dset5saiawc").selectedIndex = (Dda[5]>>2)&1;
+	document.getElementById("Dset5me").selectedIndex = (Dda[5]>>1)&1;
+	document.getElementById("Dset5sosawc").selectedIndex = Dda[5]&1;
 }
 </script>
 </head>
@@ -1183,7 +1306,7 @@ Vertical position out of caves: <select id="set4VtPos">
 <option value="11">Cache 1</option>
 <option value="12">Cache 2</option>
 <option value="13">Cache 3</option>
-</select>, set <select id="caveSet">
+</select>; set <select id="caveSet">
 <option value="0">0</option>
 <option value="1">1</option>
 <option value="2">2</option>
@@ -1445,7 +1568,7 @@ Vertical position out of caves: <select id="set4VtPos">
 <option value="254">254</option>
 <option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=caveChange()><br>
-<input type=button value="Load defaults" onClick=loadCaveDefaults()> of selected cave
+<input type=button value="Load defaults" onClick=loadCaveDefaults()> of selected cave.
 <fieldset>
 <legend>Cave - set 0</legend>
 Negative prices: <select id="Cset0np">
@@ -1679,6 +1802,709 @@ Rightmost item: <select id="Cset2ri">
 <option value="3F">Nothing</option>
 </select><br>
 <input type=button value="Set key" onClick=caveSet2KeyGen()>
+</fieldset>
+<h2>Underworld maps</h2>
+<select id="Dquest">
+<option value="0">1st</option>
+<option value="12">2nd</option>
+</select> quest, map for dungeons <select id="Dmap">
+<option value="0">1 - 6</option>
+<option value="6">7 - 9</option>
+</select>, room at column <select id="DscreenCol">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">10</option>
+<option value="B">11</option>
+<option value="C">12</option>
+<option value="D">13</option>
+<option value="E">14</option>
+<option value="F">15</option>
+</select>, row <select id="DscreenRow">
+<option value="0">0</option>
+<option value="10">1</option>
+<option value="20">2</option>
+<option value="30">3</option>
+<option value="40">4</option>
+<option value="50">5</option>
+<option value="60">6</option>
+<option value="70">7</option>
+</select>; property set <select id="Dpstc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+</select> key should be <select id="DnewKey">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="40">40</option>
+<option value="41">41</option>
+<option value="42">42</option>
+<option value="43">43</option>
+<option value="44">44</option>
+<option value="45">45</option>
+<option value="46">46</option>
+<option value="47">47</option>
+<option value="48">48</option>
+<option value="49">49</option>
+<option value="50">50</option>
+<option value="51">51</option>
+<option value="52">52</option>
+<option value="53">53</option>
+<option value="54">54</option>
+<option value="55">55</option>
+<option value="56">56</option>
+<option value="57">57</option>
+<option value="58">58</option>
+<option value="59">59</option>
+<option value="60">60</option>
+<option value="61">61</option>
+<option value="62">62</option>
+<option value="63">63</option>
+<option value="64">64</option>
+<option value="65">65</option>
+<option value="66">66</option>
+<option value="67">67</option>
+<option value="68">68</option>
+<option value="69">69</option>
+<option value="70">70</option>
+<option value="71">71</option>
+<option value="72">72</option>
+<option value="73">73</option>
+<option value="74">74</option>
+<option value="75">75</option>
+<option value="76">76</option>
+<option value="77">77</option>
+<option value="78">78</option>
+<option value="79">79</option>
+<option value="80">80</option>
+<option value="81">81</option>
+<option value="82">82</option>
+<option value="83">83</option>
+<option value="84">84</option>
+<option value="85">85</option>
+<option value="86">86</option>
+<option value="87">87</option>
+<option value="88">88</option>
+<option value="89">89</option>
+<option value="90">90</option>
+<option value="91">91</option>
+<option value="92">92</option>
+<option value="93">93</option>
+<option value="94">94</option>
+<option value="95">95</option>
+<option value="96">96</option>
+<option value="97">97</option>
+<option value="98">98</option>
+<option value="99">99</option>
+<option value="100">100</option>
+<option value="101">101</option>
+<option value="102">102</option>
+<option value="103">103</option>
+<option value="104">104</option>
+<option value="105">105</option>
+<option value="106">106</option>
+<option value="107">107</option>
+<option value="108">108</option>
+<option value="109">109</option>
+<option value="110">110</option>
+<option value="111">111</option>
+<option value="112">112</option>
+<option value="113">113</option>
+<option value="114">114</option>
+<option value="115">115</option>
+<option value="116">116</option>
+<option value="117">117</option>
+<option value="118">118</option>
+<option value="119">119</option>
+<option value="120">120</option>
+<option value="121">121</option>
+<option value="122">122</option>
+<option value="123">123</option>
+<option value="124">124</option>
+<option value="125">125</option>
+<option value="126">126</option>
+<option value="127">127</option>
+<option value="128">128</option>
+<option value="129">129</option>
+<option value="130">130</option>
+<option value="131">131</option>
+<option value="132">132</option>
+<option value="133">133</option>
+<option value="134">134</option>
+<option value="135">135</option>
+<option value="136">136</option>
+<option value="137">137</option>
+<option value="138">138</option>
+<option value="139">139</option>
+<option value="140">140</option>
+<option value="141">141</option>
+<option value="142">142</option>
+<option value="143">143</option>
+<option value="144">144</option>
+<option value="145">145</option>
+<option value="146">146</option>
+<option value="147">147</option>
+<option value="148">148</option>
+<option value="149">149</option>
+<option value="150">150</option>
+<option value="151">151</option>
+<option value="152">152</option>
+<option value="153">153</option>
+<option value="154">154</option>
+<option value="155">155</option>
+<option value="156">156</option>
+<option value="157">157</option>
+<option value="158">158</option>
+<option value="159">159</option>
+<option value="160">160</option>
+<option value="161">161</option>
+<option value="162">162</option>
+<option value="163">163</option>
+<option value="164">164</option>
+<option value="165">165</option>
+<option value="166">166</option>
+<option value="167">167</option>
+<option value="168">168</option>
+<option value="169">169</option>
+<option value="170">170</option>
+<option value="171">171</option>
+<option value="172">172</option>
+<option value="173">173</option>
+<option value="174">174</option>
+<option value="175">175</option>
+<option value="176">176</option>
+<option value="177">177</option>
+<option value="178">178</option>
+<option value="179">179</option>
+<option value="180">180</option>
+<option value="181">181</option>
+<option value="182">182</option>
+<option value="183">183</option>
+<option value="184">184</option>
+<option value="185">185</option>
+<option value="186">186</option>
+<option value="187">187</option>
+<option value="188">188</option>
+<option value="189">189</option>
+<option value="190">190</option>
+<option value="191">191</option>
+<option value="192">192</option>
+<option value="193">193</option>
+<option value="194">194</option>
+<option value="195">195</option>
+<option value="196">196</option>
+<option value="197">197</option>
+<option value="198">198</option>
+<option value="199">199</option>
+<option value="200">200</option>
+<option value="201">201</option>
+<option value="202">202</option>
+<option value="203">203</option>
+<option value="204">204</option>
+<option value="205">205</option>
+<option value="206">206</option>
+<option value="207">207</option>
+<option value="208">208</option>
+<option value="209">209</option>
+<option value="210">210</option>
+<option value="211">211</option>
+<option value="212">212</option>
+<option value="213">213</option>
+<option value="214">214</option>
+<option value="215">215</option>
+<option value="216">216</option>
+<option value="217">217</option>
+<option value="218">218</option>
+<option value="219">219</option>
+<option value="220">220</option>
+<option value="221">221</option>
+<option value="222">222</option>
+<option value="223">223</option>
+<option value="224">224</option>
+<option value="225">225</option>
+<option value="226">226</option>
+<option value="227">227</option>
+<option value="228">228</option>
+<option value="229">229</option>
+<option value="230">230</option>
+<option value="231">231</option>
+<option value="232">232</option>
+<option value="233">233</option>
+<option value="234">234</option>
+<option value="235">235</option>
+<option value="236">236</option>
+<option value="237">237</option>
+<option value="238">238</option>
+<option value="239">239</option>
+<option value="240">240</option>
+<option value="241">241</option>
+<option value="242">242</option>
+<option value="243">243</option>
+<option value="244">244</option>
+<option value="245">245</option>
+<option value="246">246</option>
+<option value="247">247</option>
+<option value="248">248</option>
+<option value="249">249</option>
+<option value="250">250</option>
+<option value="251">251</option>
+<option value="252">252</option>
+<option value="253">253</option>
+<option value="254">254</option>
+<option value="255">255</option>
+</select>. <input type=button value="Generate" onClick=dungeonChange()><br>
+<input type=button value="Load defaults" onClick=loadDungeonDefaults()> of selected quest/map/room.
+<fieldset>
+<legend>Dungeon properties - set 0</legend>
+<b>If normal room:</b><br>
+Top wall: <select id="Dset0tw">
+<option value="0">Open door</option>
+<option value="1">Solid wall</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">Bombable</option>
+<option value="5">Key-door</option>
+<option value="6">6</option>
+<option value="7">Closed door</option>
+</select><br>
+Bottom wall: <select id="Dset0bw">
+<option value="0">Open door</option>
+<option value="1">Solid wall</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">Bombable</option>
+<option value="5">Key-door</option>
+<option value="6">6</option>
+<option value="7">Closed door</option>
+</select><br>
+Outer palette: <select id="Dset0op">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet0KeyGenN()>
+<hr>
+<b>If underground:</b><br>
+Unused?: <select id="Dset0u">
+<option value="0">0</option>
+<option value="80">1</option>
+</select><br>
+Left exit room: column <select id="Dset0lerc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">10</option>
+<option value="B">11</option>
+<option value="C">12</option>
+<option value="D">13</option>
+<option value="E">14</option>
+<option value="F">15</option>
+</select>, row <select id="Dset0lerr">
+<option value="0">0</option>
+<option value="10">1</option>
+<option value="20">2</option>
+<option value="30">3</option>
+<option value="40">4</option>
+<option value="50">5</option>
+<option value="60">6</option>
+<option value="70">7</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet0KeyGenU()>
+</fieldset>
+<fieldset>
+<legend>Dungeon properties - set 1</legend>
+<b>If normal room:</b><br>
+Left wall: <select id="Dset1lw">
+<option value="0">Open door</option>
+<option value="1">Solid wall</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">Bombable</option>
+<option value="5">Key-door</option>
+<option value="6">6</option>
+<option value="7">Closed door</option>
+</select><br>
+Right wall: <select id="Dset1rw">
+<option value="0">Open door</option>
+<option value="1">Solid wall</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">Bombable</option>
+<option value="5">Key-door</option>
+<option value="6">6</option>
+<option value="7">Closed door</option>
+</select><br>
+Inner palette: <select id="Dset1ip">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet1KeyGenN()>
+<hr>
+<b>If underground:</b><br>
+Unused?: <select id="Dset1u">
+<option value="0">0</option>
+<option value="80">1</option>
+</select><br>
+Right exit room: column <select id="Dset1rerc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">10</option>
+<option value="B">11</option>
+<option value="C">12</option>
+<option value="D">13</option>
+<option value="E">14</option>
+<option value="F">15</option>
+</select>, row <select id="Dset1rerr">
+<option value="00">0</option>
+<option value="10">1</option>
+<option value="20">2</option>
+<option value="30">3</option>
+<option value="40">4</option>
+<option value="50">5</option>
+<option value="60">6</option>
+<option value="70">7</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet1KeyGenU()>
+</fieldset>
+<fieldset>
+<legend>Dungeon properties - set 2</legend>
+<b>If normal room:</b><br>
+Quantity code: <select id="Dset2qc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Enemy code: <select id="Dset2ec">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+<option value="E">E</option>
+<option value="F">F</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="1A">1A</option>
+<option value="1B">1B</option>
+<option value="1C">1C</option>
+<option value="1D">1D</option>
+<option value="1E">1E</option>
+<option value="1F">1F</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="2A">2A</option>
+<option value="2B">2B</option>
+<option value="2C">2C</option>
+<option value="2D">2D</option>
+<option value="2E">2E</option>
+<option value="2F">2F</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="3A">3A</option>
+<option value="3B">3B</option>
+<option value="3C">3C</option>
+<option value="3D">3D</option>
+<option value="3E">3E</option>
+<option value="3F">3F</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet2KeyGenN()>
+<hr>
+<b>If underground:</b><br>
+X position out of underground: <select id="Dset2Xp">
+<option value="00">0</option>
+<option value="10">1</option>
+<option value="20">2</option>
+<option value="30">3</option>
+<option value="40">4</option>
+<option value="50">5</option>
+<option value="60">6</option>
+<option value="70">7</option>
+<option value="80">8</option>
+<option value="90">9</option>
+<option value="A0">10</option>
+<option value="B0">11</option>
+<option value="C0">12</option>
+<option value="D0">13</option>
+<option value="E0">14</option>
+<option value="F0">15</option>
+</select><br>
+Y position out of underground: <select id="Dset2Yp">
+<option value="00">0</option>
+<option value="01">1</option>
+<option value="02">2</option>
+<option value="03">3</option>
+<option value="04">4</option>
+<option value="05">5</option>
+<option value="06">6</option>
+<option value="07">7</option>
+<option value="08">8</option>
+<option value="09">9</option>
+<option value="0A">10</option>
+<option value="0B">11</option>
+<option value="0C">12</option>
+<option value="0D">13</option>
+<option value="0E">14</option>
+<option value="0F">15</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet2KeyGenU()>
+</fieldset>
+<fieldset>
+<legend>Dungeon properties - set 3</legend>
+Enemy table: <select id="Dset3et">
+<option value="00">Normal</option>
+<option value="80">Special</option>
+</select><br>
+Movable block: <select id="Dset3mb">
+<option value="00">No</option>
+<option value="40">Yes</option>
+</select><br>
+Screen code: <select id="Dset3sc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="A">A</option>
+<option value="B">B</option>
+<option value="C">C</option>
+<option value="D">D</option>
+<option value="E">E</option>
+<option value="F">F</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="1A">1A</option>
+<option value="1B">1B</option>
+<option value="1C">1C</option>
+<option value="1D">1D</option>
+<option value="1E">1E</option>
+<option value="1F">1F</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+<option value="2A">2A</option>
+<option value="2B">2B</option>
+<option value="2C">2C</option>
+<option value="2D">2D</option>
+<option value="2E">2E</option>
+<option value="2F">2F</option>
+<option value="30">30</option>
+<option value="31">31</option>
+<option value="32">32</option>
+<option value="33">33</option>
+<option value="34">34</option>
+<option value="35">35</option>
+<option value="36">36</option>
+<option value="37">37</option>
+<option value="38">38</option>
+<option value="39">39</option>
+<option value="3A">3A</option>
+<option value="3B">3B</option>
+<option value="3C">3C</option>
+<option value="3D">3D</option>
+<option value="3E">3E</option>
+<option value="3F">3F</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet3KeyGen()>
+</fieldset>
+<fieldset>
+<legend>Dungeon properties - set 4</legend>
+Darkness: <select id="Dset4d">
+<option value="00">No</option>
+<option value="80">Yes</option>
+</select><br>
+Boss cry: <select id="Dset4bc">
+<option value="0">None</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Room item: <select id="Dset4ri">
+<option value="00">Bomb</option>
+<option value="01">Rusty sword</option>
+<option value="02">White sword</option>
+<option value="03">Magic sword?</option>
+<option value="04">Food</option>
+<option value="05">Recorder</option>
+<option value="06">Blue candle</option>
+<option value="07">Red Candle</option>
+<option value="08">Arrow</option>
+<option value="09">Silver arrow</option>
+<option value="0A">Bow</option>
+<option value="0B">Magical key</option>
+<option value="0C">Raft</option>
+<option value="0D">Stepladder</option>
+<option value="0E">Ganon's Triforce</option>
+<option value="0F">5 Rupees</option>
+<option value="10">Magical rod</option>
+<option value="11">Book of magic</option>
+<option value="12">Blue ring</option>
+<option value="13">Red ring</option>
+<option value="14">Power bracelet</option>
+<option value="15">Letter</option>
+<option value="16">Compass</option>
+<option value="17">Map</option>
+<option value="18">Rupee</option>
+<option value="19">Key</option>
+<option value="1A">Heart container</option>
+<option value="1B">Triforce piece</option>
+<option value="1C">Magical shield</option>
+<option value="1D">Boomerang</option>
+<option value="1E">Magical Boomerang</option>
+<option value="1F">Blue potion</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet4KeyGen()>
+</fieldset>
+<fieldset>
+<legend>Dungeon properties - set 5</legend>
+Unused1: <select id="Dset5u1">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Item position code: <select id="Dset5ipc">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+</select><br>
+Unused2: <select id="Dset5u2">
+<option value="0">0</option>
+<option value="8">1</option>
+</select><br>
+Secret activated/item appears when cleared: <select id="Dset5saiawc">
+<option value="0">No</option>
+<option value="4">Yes</option>
+</select><br>
+Master enemy: <select id="Dset5me">
+<option value="0">No</option>
+<option value="2">Yes</option>
+</select><br>
+Shutters open/stairway appears when cleared: <select id="Dset5sosawc">
+<option value="0">No</option>
+<option value="1">Yes</option>
+</select><br>
+<input type=button value="Set key" onClick=dungeonSet5KeyGen()>
 </fieldset>
 </body>
 </html>
