@@ -296,8 +296,15 @@ function loadDungeonDefaults()
 	document.getElementById("Dset5sosawc").selectedIndex = Dda[5]&1;
 }
 </script>
+<style>
+fieldset
+{
+	display: inline-block;
+}
+</style>
 </head>
 <body>
+<h1>Bank 4</h1>
 <h2>Loot table</h2>
 <table border=1>
 <tr><td colspan=10>Group 0(A)</td><td colspan=10>Group 1(C)</td><td colspan=10>Group 2(B)</td><td colspan=10>Group 3(D)</td></tr>
@@ -672,6 +679,7 @@ Item at offset <select id="lootTableOffset">
 <option value="23">Fairy</option>
 <option value="21">Clock</option>
 </select>. <input type=Button value="Generate" onClick=lootTableChange()>
+<h1>Bank 6</h1>
 <h2>Overworld map</h2>
 Screen at column <select id="OWscreenCol">
 <option value="0">0</option>
@@ -963,7 +971,7 @@ Screen at column <select id="OWscreenCol">
 <option value="254">254</option>
 <option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=overworldChange()><br>
-<input type=button value="Load defaults" onClick=loadOWdefaults()> of selected screen.
+<input type=button value="Load defaults" onClick=loadOWdefaults()> of selected screen.<br>
 <fieldset>
 <legend>Overworld properties - set 0</legend>
 Horizontal position out of caves: <select id="set0HzPos">
@@ -1568,7 +1576,7 @@ Vertical position out of caves: <select id="set4VtPos">
 <option value="254">254</option>
 <option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=caveChange()><br>
-<input type=button value="Load defaults" onClick=loadCaveDefaults()> of selected cave.
+<input type=button value="Load defaults" onClick=loadCaveDefaults()> of selected cave.<br>
 <fieldset>
 <legend>Cave - set 0</legend>
 Negative prices: <select id="Cset0np">
@@ -2101,7 +2109,7 @@ Rightmost item: <select id="Cset2ri">
 <option value="254">254</option>
 <option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=dungeonChange()><br>
-<input type=button value="Load defaults" onClick=loadDungeonDefaults()> of selected quest/map/room.
+<input type=button value="Load defaults" onClick=loadDungeonDefaults()> of selected quest/map/room.<br>
 <fieldset>
 <legend>Dungeon properties - set 0</legend>
 <b>If normal room:</b><br>
