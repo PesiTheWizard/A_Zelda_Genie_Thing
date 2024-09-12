@@ -1,0 +1,6 @@
+AAELGIAG - Randomizer initialization is 0. Should lead to every random number being 0.
+ESKUIAEY - Inverts the bomb-flag check on 10-kill streak drop
+ENVUYAEI - Inverts the fairy-check on drop
+OXVUPASX - Ignores the drop table and makes all drops be bombs
+ENVAEGEI - Inverts the X-position checker for armos secrets
+EOVLZAEL - Inverts the drop odds checker. Drop odds are 1 minus what they were.
