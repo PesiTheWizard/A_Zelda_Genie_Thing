@@ -295,15 +295,533 @@ function loadDungeonDefaults()
 	document.getElementById("Dset5me").selectedIndex = (Dda[5]>>1)&1;
 	document.getElementById("Dset5sosawc").selectedIndex = Dda[5]&1;
 }
+function SpriteChange()
+{
+	const FB = 0x915B;
+	const SI = document.getElementById("spriteSel").selectedIndex;
+	const SL = document.getElementById("spriteLine").selectedIndex;
+	const SP = document.getElementById("spritePanel").selectedIndex;
+	const FI = SI*16+SL+SP*8;
+	const oSv = SpriteData[FI];
+	const nSv =
+		(document.getElementById("SB1").checked << 0) |
+		(document.getElementById("SB2").checked << 1) |
+		(document.getElementById("SB3").checked << 2) |
+		(document.getElementById("SB4").checked << 3) |
+		(document.getElementById("SB5").checked << 4) |
+		(document.getElementById("SB6").checked << 5) |
+		(document.getElementById("SB7").checked << 6) |
+		(document.getElementById("SB8").checked << 7);
+	alerter(FB+FI,oSv,nSv);
+}
+function loadSpriteDefault()
+{
+	const SI = document.getElementById("spriteSel").selectedIndex;
+	const SL = document.getElementById("spriteLine").selectedIndex;
+	const SP = document.getElementById("spritePanel").selectedIndex;
+	const FV = SpriteData[SI*16+SL+SP*8];
+	document.getElementById("SB1").checked = (FV&1)===1;
+	document.getElementById("SB2").checked = ((FV>>>1)&1)===1;
+	document.getElementById("SB3").checked = ((FV>>>2)&1)===1;
+	document.getElementById("SB4").checked = ((FV>>>3)&1)===1;
+	document.getElementById("SB5").checked = ((FV>>>4)&1)===1;
+	document.getElementById("SB6").checked = ((FV>>>5)&1)===1;
+	document.getElementById("SB7").checked = ((FV>>>6)&1)===1;
+	document.getElementById("SB8").checked = ((FV>>>7)&1)===1;
+}
+function TilingChange()
+{
+	const T0 = document.getElementById("Tscreen").selectedIndex % 2;
+	const Tlesser = document.getElementById("Tcol").selectedIndex;
+	const Tgreater = document.getElementById("Trow").selectedIndex;
+	const nTid = document.getElementById("Tid").selectedIndex;
+	const oTid = screenTilings[T0][Tgreater][Tlesser];
+	const tcMem = [0xA86C,0xA401][T0] + Tgreater*0x23 + Tlesser;
+	alerter(tcMem,oTid,nTid);
+}
+function loadTilingDefault()
+{
+	const T0 = document.getElementById("Tscreen").selectedIndex % 2;
+	const Tlesser = document.getElementById("Tcol").selectedIndex;
+	const Tgreater = document.getElementById("Trow").selectedIndex;
+	const oTid = screenTilings[T0][Tgreater][Tlesser];
+	document.getElementById("Tid").selectedIndex = oTid;
+}
 </script>
 <style>
 fieldset
 {
-	display: inline-block;
+	display:inline-block;
+}
+select
+{
+	margin-top:1px;
+	margin-bottom:1px;
 }
 </style>
 </head>
 <body>
+<h1>Bank 3</h1>
+<h2>Sprite graphics</h2>
+Tile:<br>
+<select size=8 id="spriteSel">
+<optgroup label="Tiles_S_Surface">
+<option selected>8E—Unknown1_Top</option>
+<option>8F—Unknown1_Bottom</option>
+<option>90—Rock1_TopLeft</option>
+<option>91—Rock1_BottomLeft</option>
+<option>92—Rock1_TopRight</option>
+<option>93—Rock1_BottomRight</option>
+<option>94—Unknown2_TopLeft</option>
+<option>95—Unknown2_BottomLeft</option>
+<option>96—Unknown2_TopRight</option>
+<option>97—Unknown2_BottomRight</option>
+<option>98—OldMan_TopLeft</option>
+<option>99—Oldman_BottomLeft</option>
+<option>9A—OldWoman_TopLeft</option>
+<option>9B—OldWoman_BottomLeft</option>
+<option>9C—Merchant_TopLeft</option>
+<option>9D—Merchant_BottomLeft</option>
+<option>9E—OctoRockShot_Top</option>
+<option>9F—OctoRockShot_Bottom</option>
+<option>A0—Armos_Front_Frame1_TopLeft</option>
+<option>A1—Armos_Front_Frame1_BottomLeft</option>
+<option>A2—Armos_Front_Frame1_TopRight</option>
+<option>A3—Armos_Front_Frame1_BottomRight</option>
+<option>A4—Armos_Front_Frame2_TopLeft</option>
+<option>A5—Armos_Front_Frame2_BottomLeft</option>
+<option>A6—Armos_Front_Frame2_TopRight</option>
+<option>A7—Armos_Front_Frame2_BottomRight</option>
+<option>A8—Armos_Back_Frame1_TopLeft</option>
+<option>A9—Armos_Back_Frame1_BottomLeft</option>
+<option>AA—Armos_Back_Frame1_TopRight</option>
+<option>AB—Armos_Back_Frame1_BottomRight</option>
+<option>AC—Armos_Back_Frame2_TopLeft</option>
+<option>AD—Armos_Back_Frame2_BottomLeft</option>
+<option>AE—Armos_Back_Frame2_TopRight</option>
+<option>AF—Armos_Back_Frame2_BottomRight</option>
+<option>B0—Octorok_Down_Frame1_TopLeft</option>
+<option>B1—Octorok_Down_Frame1_BottomLeft</option>
+<option>B2—Octorok_Down_Frame2_TopLeft</option>
+<option>B3—Octorok_Down_Frame2_BottomLeft</option>
+<option>B4—Octorok_Side_Frame1_TopLeft</option>
+<option>B5—Octorok_Side_Frame1_BottomLeft</option>
+<option>B6—Octorok_Side_Frame1_TopRight</option>
+<option>B7—Octorok_Side_Frame1_BottomRight</option>
+<option>B8—Octorok_Side_Frame2_TopLeft</option>
+<option>B9—Octorok_Side_Frame2_BottomLeft</option>
+<option>BA—Octorok_Side_Frame2_TopRight</option>
+<option>BB—Octorok_Side_Frame2_BottomRight</option>
+<option>BC—Leever_Frame1_TopLeft</option>
+<option>BD—Leever_Frame1_BottomLeft</option>
+<option>BE—Leever_Frame2_TopLeft</option>
+<option>BF—Leever_Frame2_BottomLeft</option>
+<option>C0—Leever_Frame3_TopLeft</option>
+<option>C1—Leever_Frame3_BottomLeft</option>
+<option>C2—Leever_Frame4_TopLeft</option>
+<option>C3—Leever_Frame4_BottomLeft</option>
+<option>C4—Leever_Frame5_TopLeft</option>
+<option>C5—Leever_Frame5_BottomLeft</option>
+<option>C6—Peahat_Frame1_TopLeft</option>
+<option>C7—Peahat_Frame1_BottomLeft</option>
+<option>C8—Peahat_Frame2_TopLeft</option>
+<option>C9—Peahat_Frame2_BottomLeft</option>
+<option>CA—Tektike_Frame1_TopLeft</option>
+<option>CB—Tektike_Frame1_BottomLeft</option>
+<option>CC—Tektike_Frame2_TopLeft</option>
+<option>CD—Tektike_Frame2_BottomLeft</option>
+<option>CE—Lynel_Side_Frame1_TopLeft</option>
+<option>CF—Lynel_Side_Frame1_BottomLeft</option>
+<option>D0—Lynel_Side_Frame1_TopRight</option>
+<option>D1—Lynel_Side_Frame1_BottomRight</option>
+<option>D2—Lynel_Side_Frame2_TopLeft</option>
+<option>D3—Lynel_Side_Frame2_BottomLeft</option>
+<option>D4—Lynel_Side_Frame2_TopRight</option>
+<option>D5—Lynel_Side_Frame2_BottomRight</option>
+<option>D6—Lynel_Down_TopLeft</option>
+<option>D7—Lynel_Down_BottomLeft</option>
+<option>D8—Lynel_Down_TopRight</option>
+<option>D9—Lynel_Down_BottomRight</option>
+<option>DA—Lynel_Up_TopLeft</option>
+<option>DB—Lynel_Up_BottomLeft</option>
+<option>DC—Lynel_Up_TopRight</option>
+<option>DD—Lynel_Up_BottomRight</option>
+<option>DE—Unknown3_Top</option>
+<option>DF—Unknown3_Bottom</option>
+<option>E0—Ghini_Front_TopLeft</option>
+<option>E1—Ghini_Front_BottomLeft</option>
+<option>E2—Ghini_Front_TopRight</option>
+<option>E3—Ghini_Front_BottomRight</option>
+<option>E4—Ghini_Back_TopLeft</option>
+<option>E5—Ghini_Back_BottomLeft</option>
+<option>E6—Ghini_Back_TopRight</option>
+<option>E7—Ghini_Back_BottomRight</option>
+<option>E8—Rock2_TopLeft</option>
+<option>E9—Rock2_BottomLeft</option>
+<option>EA—Rock2_TopRight</option>
+<option>EB—Rock2_BottomRight</option>
+<option>EC—Zola_Front_TopLeft</option>
+<option>ED—Zola_Front_BottomLeft</option>
+<option>EE—Zola_Back_TopLeft</option>
+<option>EF—Zola_Back_BottomLeft</option>
+<option>F0—Moblin_Side_Frame1_TopLeft</option>
+<option>F1—Moblin_Side_Frame1_BottomLeft</option>
+<option>F2—Moblin_Side_Frame1_TopRight</option>
+<option>F3—Moblin_Side_Frame1_BottomRight</option>
+<option>F4—Moblin_Side_Frame2_TopLeft</option>
+<option>F5—Moblin_Side_Frame2_BottomLeft</option>
+<option>F6—Moblin_Side_Frame2_TopRight</option>
+<option>F7—Moblin_Side_Frame2_BottomRight</option>
+<option>F8—Moblin_Front_TopLeft</option>
+<option>F9—Moblin_Front_BottomLeft</option>
+<option>FA—Moblin_Front_TopRight</option>
+<option>FB—Moblin_Front_BottomRight</option>
+<option>FC—Moblin_Back_TopLeft</option>
+<option>FD—Moblin_Back_BottomLeft</option>
+<option>FE—Moblin_Back_TopRight</option>
+<option>FF—Moblin_Back_BottomRight</option>
+</optgroup>
+<optgroup label="Tiles_S_358">
+<option>9E—Blank1</option>
+<option>9F—Blank2</option>
+<option>A0—PolsVoice_Frame1_TopLeft</option>
+<option>A1—PolsVoice_Frame1_BottomLeft</option>
+<option>A2—PolsVoice_Frame2_TopLeft</option>
+<option>A3—PolsVoice_Frame2_BottomLeft</option>
+<option>A4—Gibdo_TopLeft</option>
+<option>A5—Gibdo_BottomLeft</option>
+<option>A6—Gibdo_TopRight</option>
+<option>A7—Gidbo_BottomRight</option>
+<option>A8—Zol_Frame1_TopLeft</option>
+<option>A9—Zol_Frame1_BottomLeft</option>
+<option>AA—Zol_Frame2_TopLeft</option>
+<option>AB—Zol_Frame2_BottomLeft</option>
+<option>AC—Darknut_Front_Frame1_TopLeft</option>
+<option>AD—Darknut_Front_Frame1_BottomLeft</option>
+<option>AE—Darknut_Front_Frame1_TopRight</option>
+<option>AF—Darknut_Front_Frame1_BottomRight</option>
+<option>B0—Darknut_Front_Frame2_TopLeft</option>
+<option>B1—Darknut_Front_Frame2_BottomLeft</option>
+<option>B2—Darknut_Front_Frame2_TopRight</option>
+<option>B3—Darknut_Front_Frame2_BottomRight</option>
+<option>B4—Darknut_Back_TopLeft</option>
+<option>B5—Darknut_Back_BottomLeft</option>
+<option>B6—Darknut_Back_TopRight</option>
+<option>B7—Darknut_Back_BottomRight</option>
+<option>B8—Darknut_Side_Frame1_TopLeft</option>
+<option>B9—Darknut_Side_Frame1_BottomLeft</option>
+<option>BA—Darknut_Side_Frame1_TopRight</option>
+<option>BB—Darknut_Side_Frame1_BottomRight</option>
+<option>BC—Darknut_Side_Frame2_TopLeft</option>
+<option>BD—Darknut_Side_Frame2_BottomLeft</option>
+<option>BE—Darknut_Side_Frame2_TopRight</option>
+<option>BF—Darknut_Side_Frame2_BottomRight</option>
+</optgroup>
+<optgroup label="Tiles_S_469">
+<option>9E—Lanmola_Head_Top</option>
+<option>9F—Lanmola_Head_Bottom</option>
+<option>A0—Lanmola_Body_Top</option>
+<option>A1—Lanmola_Body_Bottom</option>
+<option>A2—LikeLike_Frame1_TopLeft</option>
+<option>A3—LikeLike_Frame1_BottomLeft</option>
+<option>A4—LikeLike_Frame2_TopLeft</option>
+<option>A5—LikeLike_Frame2_BottomLeft</option>
+<option>A6—LikeLike_Frame3_TopLeft</option>
+<option>A7—LikeLike_Frame3_BottomLeft</option>
+<option>A8—Zol2_Frame1_TopLeft</option>
+<option>A9—Zol2_Frame1_BottomLeft</option>
+<option>AA—Zol2_Frame2_TopLeft</option>
+<option>AB—Zol2_Frame2_BottomLeft</option>
+<option>AC—Vire_Front_Frame1_TopLeft</option>
+<option>AD—Vire_Front_Frame1_BottomLeft</option>
+<option>AE—Vire_Front_Frame2_TopLeft</option>
+<option>AF—Vire_Front_Frame2_BottomLeft</option>
+<option>B0—Vire_Back_Frame1_TopLeft</option>
+<option>B1—Vire_Back_Frame1_BottomLeft</option>
+<option>B2—Vire_Back_Frame2_TopLeft</option>
+<option>B3—Vire_Back_Frame2_BottomLeft</option>
+<option>B4—Wizzrobe_Front_Frame1_TopLeft</option>
+<option>B5—Wizzrobe_Front_Frame1_BottomLeft</option>
+<option>B6—Wizzrobe_Front_Frame1_TopRight</option>
+<option>B7—Wizzrobe_Front_Frame1_BottomRight</option>
+<option>B8—Wizzrobe_Front_Frame2_TopLeft</option>
+<option>B9—Wizzrobe_Front_Frame2_BottomLeft</option>
+<option>BA—Wizzrobe_Front_Frame2_TopRight</option>
+<option>BB—Wizzrobe_Front_Frame2_BottomRight</option>
+<option>BC—Wizzrobe_Back_Frame1_Top</option>
+<option>BD—Wizzrobe_Back_Frame1_Bottom</option>
+<option>BE—Wizzrobe_Back_Frame2_Top</option>
+<option>BF—Wizzrobe_Back_Frame2_Bottom</option>
+</optgroup>
+<optgroup label="Tiles_S_Dungeon">
+<option>8E—Bubble_TopLeft</option>
+<option>8F—Bubble_BottomLeft</option>
+<option>90—Bubble_TopRight</option>
+<option>91—Bubble_BottomRight</option>
+<option>92—Gel_Frame1_Top</option>
+<option>93—Gel_Frame1_Bottom</option>
+<option>94—Gel_Frame2_Top</option>
+<option>95—Gel_Frame2_Bottom</option>
+<option>96—Trap_Top</option>
+<option>97—Trap_Bottom</option>
+<option>98—OldMan2_Top</option>
+<option>99—OldMan2_Bottom</option>
+<option>9A—Keese_Frame1_Top</option>
+<option>9B—Keese_Frame1_Bottom</option>
+<option>9C—Keese_Frame2_Top</option>
+<option>9D—Keese_Frame2_Bottom</option>
+</optgroup>
+<optgroup label="Tiles_S_127">
+<option>9E—WallMaster_Fingers_Frame2_Top</option>
+<option>9F—WallMaster_Fingers_Frame2_Bottom</option>
+<option>A0—Rope_Frame1_TopLeft</option>
+<option>A1—Rope_Frame1_BottomLeft</option>
+<option>A2—Rope_Frame1_TopRight</option>
+<option>A3—Rope_Frame1_BottomRight</option>
+<option>A4—Rope_Frame2_TopLeft</option>
+<option>A5—Rope_Frame2_BottomLeft</option>
+<option>A6—Rope_Frame2_TopRight</option>
+<option>A7—Rope_Frame2_BottomRight</option>
+<option>A8—Stalfos_TopLeft</option>
+<option>A9—Stalfos_BottomLeft</option>
+<option>AA—Stalfos_TopRight</option>
+<option>AB—Stalfos_BottomRight</option>
+<option>AC—WallMaster_Knuckles_Top</option>
+<option>AD—WallMaster_Knuckles_Bottom</option>
+<option>AE—WallMaster_Fingers_Frame1_Top</option>
+<option>AF—WallMaster_Fingers_Frame1_Bottom</option>
+<option>B0—Goriya_Front_TopLeft</option>
+<option>B1—Goriya_Front_BottomLeft</option>
+<option>B2—Goriya_Front_TopRight</option>
+<option>B3—Goriya_Front_BottomRight</option>
+<option>B4—Goriya_Back_TopLeft</option>
+<option>B5—Goriya_Back_BottomLeft</option>
+<option>B6—Goriya_Back_TopRight</option>
+<option>B7—Goriya_Back_BottomRight</option>
+<option>B8—Goriya_Side_Frame1_TopLeft</option>
+<option>B9—Goriya_Side_Frame1_BottomLeft</option>
+<option>BA—Goriya_Side_Frame1_TopRight</option>
+<option>BB—Goriya_Side_Frame1_BottomRight</option>
+<option>BC—Goriya_Side_Frame2_TopLeft</option>
+<option>BD—Goriya_Side_Frame2_BottomLeft</option>
+<option>BE—Goriya_Side_Frame2_TopRight</option>
+<option>BF—Goriya_Side_Frame2_BottomRight</option>
+</optgroup>
+<optgroup label="Tiles_S_Boss_1257">
+<option>C0—Aquamentus_Face_Open_Top</option>
+<option>C1—Aquamentus_Face_Open_Bottom</option>
+<option>C2—Aquamentus_Chest_Frame1_Top</option>
+<option>C3—Aquamentus_Chest_Frame1_Bottom</option>
+<option>C4—Aquamentus_Neck_top</option>
+<option>C5—Aquamentus_Neck_Bottom</option>
+<option>C6—Aquamentus_Torso_Frame1_TopLeft</option>
+<option>C7—Aquamentus_Torso_Frame1_BottomLeft</option>
+<option>C8—Aquamentus_Empty</option>
+<option>C9—Aquamentus_Tail</option>
+<option>CA—Aquamentus_Torso_Frame1_TopRight</option>
+<option>CB—Aquamentus_Torso_Frame1_BottomRight</option>
+<option>CC—Aquamentus_Face_Closed_Top</option>
+<option>CD—Aquamentus_Face_Closed_Bottom</option>
+<option>CE—Aquamentus_Chest_Frame2_Top</option>
+<option>CF—Aquamentus_Chest_Frame2_Bottom</option>
+<option>D0—Aquamentus_Torso_Frame2_TopLeft</option>
+<option>D1—Aquamentus_Torso_Frame2_BottomLeft</option>
+<option>D2—Aquamentus_Torso_Frame2_TopRight</option>
+<option>D3—Aquamentus_Torso_Frame2_BottomRight</option>
+<option>D4—Digdogger_Large_TopLeft</option>
+<option>D5—Digdogger_Large_BottomLeft</option>
+<option>D6—Digdogger_Large_TopRight</option>
+<option>D7—Digdogger_Large_BottomRight</option>
+<option>D8—Digdogger_Small_Frame1_Top</option>
+<option>D9—Digdogger_Small_Frame1_Bottom</option>
+<option>DA—Digdogger_Small_Frame2_Top</option>
+<option>DB—Digdogger_Small_Frame2_Bottom</option>
+<option>DC—Dodongo_Side_Frame1_Body_TopLeft</option>
+<option>DD—Dodongo_Side_Frame1_Body_BottomLeft</option>
+<option>DE—Dodongo_Side_Frame1_Body_TopRight</option>
+<option>DF—Dodongo_Side_Frame1_Body_BottomRight</option>
+<option>E0—Dodongo_Side_Frame1_Head_TopLeft</option>
+<option>E1—Dodongo_Side_Frame1_Head_BottomLeft</option>
+<option>E2—Dodongo_Side_Frame1_Head_TopRight</option>
+<option>E3—Dodongo_Side_Frame1_Head_BottomRight</option>
+<option>E4—Dodongo_Side_Frame2_Body_TopLeft</option>
+<option>E5—Dodongo_Side_Frame2_Body_BottomLeft</option>
+<option>E6—Dodongo_Side_Frame2_Body_TopRight</option>
+<option>E7—Dodongo_Side_Frame2_Body_BottomRight</option>
+<option>E8—Dodongo_Side_Frame2_Head_TopLeft</option>
+<option>E9—Dodongo_Side_Frame2_Head_BottomLeft</option>
+<option>EA—Dodongo_Side_Frame2_Head_TopRight</option>
+<option>EB—Dodongo_Side_Frame2_Head_BottomRight</option>
+<option>EC—Dodongo_Side_Bombed_Body_TopLeft</option>
+<option>ED—Dodongo_Side_Bombed_Body_BottomLeft</option>
+<option>EE—Dodongo_Side_Bombed_Body_TopRight</option>
+<option>EF—Dodongo_Side_Bombed_Body_BottomRight</option>
+<option>F0—Dodongo_Side_Bombed_Head_TopLeft</option>
+<option>F1—Dodongo_Side_Bombed_Head_BottomLeft</option>
+<option>F2—Dodongo_Side_Bombed_Head_TopRight</option>
+<option>F3—Dodongo_Side_Bombed_Head_BottomRight</option>
+<option>F4—Dodongo_Front_Normal_TopLeft</option>
+<option>F5—Dodongo_Front_Normal_BottomLeft</option>
+<option>F6—Dodongo_Front_Normal_TopRight</option>
+<option>F7—Dodongo_Front_Normal_BottomRight</option>
+<option>F8—Dodongo_Front_Bombed_Top</option>
+<option>F9—Dodongo_Front_Bombed_Bottom</option>
+<option>FA—Dodongo_Back_Normal_TopLeft</option>
+<option>FB—Dodongo_Back_Normal_BottomLeft</option>
+<option>FC—Dodongo_Back_Normal_TopRight</option>
+<option>FD—Dodongo_Back_Normal_BottomRight</option>
+<option>FE—Dodongo_Back_Bombed_Top</option>
+<option>FF—Dodongo_Back_Bombed_Bottom</option>
+</optgroup>
+<optgroup label="Tiles_S_Boss_3468">
+<option>C0—Gleeok_Leftwing_Frame1_Top</option>
+<option>C1—Gleeok_Leftwing_Frame1_Bottom</option>
+<option>C2—Gleeok_Leftleg_Frame1_Top</option>
+<option>C3—Gleeok_Leftleg_Frame1_Bottom</option>
+<option>C4—Gleeok_Tail_Frame12_Top</option>
+<option>C5—Gleeok_Tail_Frame12_Bottom</option>
+<option>C6—Gleeok_Torso_Top</option>
+<option>C7—Gleeok_Torso_Bottom</option>
+<option>C8—Gleeok_Rightwing_Frame1_Top</option>
+<option>C9—Gleeok_Rightwing_Frame1_Bottom</option>
+<option>CA—Gleeok_Rightleg_Frame1_Top</option>
+<option>CB—Gleeok_Rightleg_Frame1_Bottom</option>
+<option>CC—Gleeok_Leftwing_Frame2_Top</option>
+<option>CD—Gleeok_Leftwing_Frame2_Bottom</option>
+<option>CE—Gleeok_Rightwing_Frame2_Top</option>
+<option>CF—Gleeok_Rightwing_Frame2_Bottom</option>
+<option>D0—Gleeok_Rightleg_Frame2_Top</option>
+<option>D1—Gleeok_Rightleg_Frame2_Bottom</option>
+<option>D2—Gleeok_Leftwing_Frame3_Top</option>
+<option>D3—Gleeok_Leftwing_Frame3_Bottom</option>
+<option>D4—Gleeok_Leftleg_Frame2_Top</option>
+<option>D5—Gleeok_Leftleg_Frame2_Bottom</option>
+<option>D6—Gleeok_Tail_Frame3_Top</option>
+<option>D7—Gleeok_Tail_Frame3_Bottom</option>
+<option>D8—Gleeok_Rightwing_Frame3_Top</option>
+<option>D9—Gleeok_Rightwing_Frame3_Bottom</option>
+<option>DA—Gleeok_Necknode_Top</option>
+<option>DB—Gleeok_Necknode_Bottom</option>
+<option>DC—Gleeok_Head_Top</option>
+<option>DD—Gleeok_Head_Bottom</option>
+<option>DE—GleeokSkull_Frame1_Top</option>
+<option>DF—GleeokSkull_Frame1_Bottom</option>
+<option>E0—Manhandla_Claw_Side_Frame1_TopLeft</option>
+<option>E1—Manhandla_Claw_Side_Frame1_BottomLeft</option>
+<option>E2—Manhandla_Claw_Side_Frame1_TopRight</option>
+<option>E3—Manhandla_Claw_Side_Frame1_BottomRight</option>
+<option>E4—Manhandla_Claw_Side_Frame2_TopLeft</option>
+<option>E5—Manhandla_Claw_Side_Frame2_BottomLeft</option>
+<option>E6—Manhandla_Claw_Side_Frame2_TopRight</option>
+<option>E7—Manhandla_Claw_Side_Frame2_BottomRight</option>
+<option>E8—Manhandla_Claw_Front_Frame1_TopLeft</option>
+<option>E9—Manhandla_Claw_Front_Frame1_BottomLeft</option>
+<option>EA—Manhandla_Claw_Front_Frame2_TopLeft</option>
+<option>EB—Manhandla_Claw_Front_Frame2_BottomLeft</option>
+<option>EC—Manhandla_Body_TopLeft</option>
+<option>ED—Manhandla_Body_BottomLeft</option>
+<option>EE—GleeokSkull_Frame2_Top</option>
+<option>EF—GleeokSkull_Frame2_Bottom</option>
+<option>F0—Ghoma_LeftLegs_TopLeft</option>
+<option>F1—Ghoma_LeftLegs_BottomLeft</option>
+<option>F2—Ghoma_LeftLegs_TopRight</option>
+<option>F3—Ghoma_LeftLegs_BottomRight</option>
+<option>F4—Ghoma_Body1_Top</option>
+<option>F5—Ghoma_Body1_Bottom</option>
+<option>F6—Ghoma_Body2_Top</option>
+<option>F7—Ghoma_Body2_Bottom</option>
+<option>F8—Ghoma_RightLegs_TopLeft</option>
+<option>F9—Ghoma_RightLegs_BottomLeft</option>
+<option>FA—Ghoma_RightLegs_TopRight</option>
+<option>FB—Ghoma_RightLegs_BottomRight</option>
+<option>FC—Ghoma_Body3_Top</option>
+<option>FD—Ghoma_Body3_Bottom</option>
+<option>FE—Ghoma_Body4_Top</option>
+<option>FF—Ghoma_Body4_Bottom</option>
+</optgroup>
+<optgroup label="Tiles_S_Boss_9">
+<option>C0—GanonInitialPose_TopLeft_TopLeft</option>
+<option>C1—GanonInitialPose_TopLeft_BottomLeft</option>
+<option>C2—GanonInitialPose_TopLeft_TopRight</option>
+<option>C3—GanonInitialPose_TopLeft_BottomRight</option>
+<option>C4—GanonInitialPose_TopRight*_TopLeft</option>
+<option>C5—GanonInitialPose_TopRight*_BottomLeft</option>
+<option>C6—GanonInitialPose_TopRight*_TopRight</option>
+<option>C7—GanonInitialPose_TopRight*_BottomRight</option>
+<option>C8—GanonInitialPose_BottomLeft_TopLeft</option>
+<option>C9—GanonInitialPose_BottomLeft_BottomLeft</option>
+<option>CA—GanonInitialPose_BottomLeft_TopRight</option>
+<option>CB—GanonInitialPose_BottomLeft_BottomRight</option>
+<option>CC—GanonInitialPose_BottomRight*_TopLeft</option>
+<option>CD—GanonInitialPose_BottomRight*_BottomLeft</option>
+<option>CE—GanonInitialPose_BottomRight*_TopRight</option>
+<option>CF—GanonInitialPose_BottomRight*_BottomRight</option>
+<option>D0—Ganon_Frame1_Tophalf_TopLeft</option>
+<option>D1—Ganon_Frame1_Tophalf_BottomLeft</option>
+<option>D2—Ganon_Frame1_Tophalf_TopRight</option>
+<option>D3—Ganon_Frame1_Tophalf_BottomRight</option>
+<option>D4—Ganon_Frame1_Bottomhalf_TopLeft</option>
+<option>D5—Ganon_Frame1_Bottomhalf_BottomLeft</option>
+<option>D6—Ganon_Frame1_Bottomhalf_TopRight</option>
+<option>D7—Ganon_Frame1_Bottomhalf_BottomRight</option>
+<option>D8—Ganon_Frame2_Tophalf_TopLeft</option>
+<option>D9—Ganon_Frame2_Tophalf_BottomLeft</option>
+<option>DA—Ganon_Frame2_Tophalf_TopRight</option>
+<option>DB—Ganon_Frame2_Tophalf_BottomRight</option>
+<option>DC—Ganon_Frame2_Bottomhalf_TopLeft</option>
+<option>DD—Ganon_Frame2_Bottomhalf_BottomLeft</option>
+<option>DE—Ganon_Frame2_Bottomhalf_TopRight</option>
+<option>DF—Ganon_Frame2_Bottomhalf_BottomRight</option>
+<option>E0—Ganon_Frame3_Tophalf_TopLeft</option>
+<option>E1—Ganon_Frame3_Tophalf_BottomLeft</option>
+<option>E2—Ganon_Frame3_Tophalf_TopRight</option>
+<option>E3—Ganon_Frame3_Tophalf_BottomRight</option>
+<option>E4—Ganon_Frame3_Bottomhalf_TopLeft</option>
+<option>E5—Ganon_Frame3_Bottomhalf_BottomLeft</option>
+<option>E6—Ganon_Frame3_Bottomhalf_TopRight</option>
+<option>E7—Ganon_Frame3_Bottomhalf_BottomRight</option>
+<option>E8—GanonWave_V_Top</option>
+<option>E9—GanonWave_V_Bottom</option>
+<option>EA—GanonAshPile_TopLeft</option>
+<option>EB—GanonAshPile_BottomLeft</option>
+<option>EC—GanonAshPile_TopRight</option>
+<option>ED—GanonAshPile_BottomRight</option>
+<option>EE—GanonWave_H_Top</option>
+<option>EF—GanonWave_H_Bottom</option>
+<option>F0—Zelda_Free_Top</option>
+<option>F1—Zelda_Free_Bottom</option>
+<option>F2—TriforceOfPower_TopLeft</option>
+<option>F3—TriforceOfPower_BottomLeft</option>
+<option>F4—TriforceOfPower_TopRight</option>
+<option>F5—TriforceOfPower_BottomRight</option>
+<option>F6—Zelda_Captured_Top</option>
+<option>F7—Zelda_Captured_Bottom</option>
+<option>F8—PatraMain_TopLeft</option>
+<option>F9—PatraMain_BottomLeft</option>
+<option>FA—PatraMain_TopRight</option>
+<option>FB—PatraMain_BottomRight</option>
+<option>FC—PatraBaby1_Top</option>
+<option>FD—PatraBaby1_Bottom</option>
+<option>FE—PatraBaby2_Top</option>
+<option>FF—PatraBaby2_Bottom</option>
+</optgroup>
+</select>
+Line:<select id="spriteLine">
+<option>Topmost</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+<option>Bottommost</option>
+</select>,
+Bitpanel:<select id="spritePanel">
+<option>Low</option>
+<option>High</option>
+</select>,
+<nobr>Bits:<input type=checkbox id="SB8"><input type=checkbox id="SB7"><input type=checkbox id="SB6"><input type=checkbox id="SB5"><input type=checkbox id="SB4"><input type=checkbox id="SB3"><input type=checkbox id="SB2"><input type=checkbox id="SB1"></nobr><input type=button value="Generate" onclick=SpriteChange()><br>
+<input type=button value="Load defaults" onclick=loadSpriteDefault()> of selected sprite/line/panel
 <h1>Bank 4</h1>
 <h2>Loot table</h2>
 <table border=1>
@@ -322,36 +840,21 @@ Group offsets:<br>
 <option value="2">Group 2(B)</option>
 <option value="3">Group 3(D)</option>
 </select> should start at <select id="newGroupOffset">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
 <option value="30">30</option>
 </select>. <input type=button value="Generate" onClick=groupShift()>
 <hr>
@@ -362,262 +865,134 @@ Group drop odds:<br>
 <option value="2">Group 2(B)</option>
 <option value="3">Group 3(D)</option>
 </select> drop odds should be <select id="newDropOdds">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-<option value="61">61</option>
-<option value="62">62</option>
-<option value="63">63</option>
-<option value="64">64</option>
-<option value="65">65</option>
-<option value="66">66</option>
-<option value="67">67</option>
-<option value="68">68</option>
-<option value="69">69</option>
-<option value="70">70</option>
-<option value="71">71</option>
-<option value="72">72</option>
-<option value="73">73</option>
-<option value="74">74</option>
-<option value="75">75</option>
-<option value="76">76</option>
-<option value="77">77</option>
-<option value="78">78</option>
-<option value="79">79</option>
-<option value="80">80</option>
-<option value="81">81</option>
-<option value="82">82</option>
-<option value="83">83</option>
-<option value="84">84</option>
-<option value="85">85</option>
-<option value="86">86</option>
-<option value="87">87</option>
-<option value="88">88</option>
-<option value="89">89</option>
-<option value="90">90</option>
-<option value="91">91</option>
-<option value="92">92</option>
-<option value="93">93</option>
-<option value="94">94</option>
-<option value="95">95</option>
-<option value="96">96</option>
-<option value="97">97</option>
-<option value="98">98</option>
-<option value="99">99</option>
-<option value="100">100</option>
-<option value="101">101</option>
-<option value="102">102</option>
-<option value="103">103</option>
-<option value="104">104</option>
-<option value="105">105</option>
-<option value="106">106</option>
-<option value="107">107</option>
-<option value="108">108</option>
-<option value="109">109</option>
-<option value="110">110</option>
-<option value="111">111</option>
-<option value="112">112</option>
-<option value="113">113</option>
-<option value="114">114</option>
-<option value="115">115</option>
-<option value="116">116</option>
-<option value="117">117</option>
-<option value="118">118</option>
-<option value="119">119</option>
-<option value="120">120</option>
-<option value="121">121</option>
-<option value="122">122</option>
-<option value="123">123</option>
-<option value="124">124</option>
-<option value="125">125</option>
-<option value="126">126</option>
-<option value="127">127</option>
-<option value="128">128</option>
-<option value="129">129</option>
-<option value="130">130</option>
-<option value="131">131</option>
-<option value="132">132</option>
-<option value="133">133</option>
-<option value="134">134</option>
-<option value="135">135</option>
-<option value="136">136</option>
-<option value="137">137</option>
-<option value="138">138</option>
-<option value="139">139</option>
-<option value="140">140</option>
-<option value="141">141</option>
-<option value="142">142</option>
-<option value="143">143</option>
-<option value="144">144</option>
-<option value="145">145</option>
-<option value="146">146</option>
-<option value="147">147</option>
-<option value="148">148</option>
-<option value="149">149</option>
-<option value="150">150</option>
-<option value="151">151</option>
-<option value="152">152</option>
-<option value="153">153</option>
-<option value="154">154</option>
-<option value="155">155</option>
-<option value="156">156</option>
-<option value="157">157</option>
-<option value="158">158</option>
-<option value="159">159</option>
-<option value="160">160</option>
-<option value="161">161</option>
-<option value="162">162</option>
-<option value="163">163</option>
-<option value="164">164</option>
-<option value="165">165</option>
-<option value="166">166</option>
-<option value="167">167</option>
-<option value="168">168</option>
-<option value="169">169</option>
-<option value="170">170</option>
-<option value="171">171</option>
-<option value="172">172</option>
-<option value="173">173</option>
-<option value="174">174</option>
-<option value="175">175</option>
-<option value="176">176</option>
-<option value="177">177</option>
-<option value="178">178</option>
-<option value="179">179</option>
-<option value="180">180</option>
-<option value="181">181</option>
-<option value="182">182</option>
-<option value="183">183</option>
-<option value="184">184</option>
-<option value="185">185</option>
-<option value="186">186</option>
-<option value="187">187</option>
-<option value="188">188</option>
-<option value="189">189</option>
-<option value="190">190</option>
-<option value="191">191</option>
-<option value="192">192</option>
-<option value="193">193</option>
-<option value="194">194</option>
-<option value="195">195</option>
-<option value="196">196</option>
-<option value="197">197</option>
-<option value="198">198</option>
-<option value="199">199</option>
-<option value="200">200</option>
-<option value="201">201</option>
-<option value="202">202</option>
-<option value="203">203</option>
-<option value="204">204</option>
-<option value="205">205</option>
-<option value="206">206</option>
-<option value="207">207</option>
-<option value="208">208</option>
-<option value="209">209</option>
-<option value="210">210</option>
-<option value="211">211</option>
-<option value="212">212</option>
-<option value="213">213</option>
-<option value="214">214</option>
-<option value="215">215</option>
-<option value="216">216</option>
-<option value="217">217</option>
-<option value="218">218</option>
-<option value="219">219</option>
-<option value="220">220</option>
-<option value="221">221</option>
-<option value="222">222</option>
-<option value="223">223</option>
-<option value="224">224</option>
-<option value="225">225</option>
-<option value="226">226</option>
-<option value="227">227</option>
-<option value="228">228</option>
-<option value="229">229</option>
-<option value="230">230</option>
-<option value="231">231</option>
-<option value="232">232</option>
-<option value="233">233</option>
-<option value="234">234</option>
-<option value="235">235</option>
-<option value="236">236</option>
-<option value="237">237</option>
-<option value="238">238</option>
-<option value="239">239</option>
-<option value="240">240</option>
-<option value="241">241</option>
-<option value="242">242</option>
-<option value="243">243</option>
-<option value="244">244</option>
-<option value="245">245</option>
-<option value="246">246</option>
-<option value="247">247</option>
-<option value="248">248</option>
-<option value="249">249</option>
-<option value="250">250</option>
-<option value="251">251</option>
-<option value="252">252</option>
-<option value="253">253</option>
-<option value="254">254</option>
-<option value="255">255</option>
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
+<option value="30">30</option><option value="31">31</option>
+<option value="32">32</option><option value="33">33</option>
+<option value="34">34</option><option value="35">35</option>
+<option value="36">36</option><option value="37">37</option>
+<option value="38">38</option><option value="39">39</option>
+<option value="40">40</option><option value="41">41</option>
+<option value="42">42</option><option value="43">43</option>
+<option value="44">44</option><option value="45">45</option>
+<option value="46">46</option><option value="47">47</option>
+<option value="48">48</option><option value="49">49</option>
+<option value="50">50</option><option value="51">51</option>
+<option value="52">52</option><option value="53">53</option>
+<option value="54">54</option><option value="55">55</option>
+<option value="56">56</option><option value="57">57</option>
+<option value="58">58</option><option value="59">59</option>
+<option value="60">60</option><option value="61">61</option>
+<option value="62">62</option><option value="63">63</option>
+<option value="64">64</option><option value="65">65</option>
+<option value="66">66</option><option value="67">67</option>
+<option value="68">68</option><option value="69">69</option>
+<option value="70">70</option><option value="71">71</option>
+<option value="72">72</option><option value="73">73</option>
+<option value="74">74</option><option value="75">75</option>
+<option value="76">76</option><option value="77">77</option>
+<option value="78">78</option><option value="79">79</option>
+<option value="80">80</option><option value="81">81</option>
+<option value="82">82</option><option value="83">83</option>
+<option value="84">84</option><option value="85">85</option>
+<option value="86">86</option><option value="87">87</option>
+<option value="88">88</option><option value="89">89</option>
+<option value="90">90</option><option value="91">91</option>
+<option value="92">92</option><option value="93">93</option>
+<option value="94">94</option><option value="95">95</option>
+<option value="96">96</option><option value="97">97</option>
+<option value="98">98</option><option value="99">99</option>
+<option value="100">100</option><option value="101">101</option>
+<option value="102">102</option><option value="103">103</option>
+<option value="104">104</option><option value="105">105</option>
+<option value="106">106</option><option value="107">107</option>
+<option value="108">108</option><option value="109">109</option>
+<option value="110">110</option><option value="111">111</option>
+<option value="112">112</option><option value="113">113</option>
+<option value="114">114</option><option value="115">115</option>
+<option value="116">116</option><option value="117">117</option>
+<option value="118">118</option><option value="119">119</option>
+<option value="120">120</option><option value="121">121</option>
+<option value="122">122</option><option value="123">123</option>
+<option value="124">124</option><option value="125">125</option>
+<option value="126">126</option><option value="127">127</option>
+<option value="128">128</option><option value="129">129</option>
+<option value="130">130</option><option value="131">131</option>
+<option value="132">132</option><option value="133">133</option>
+<option value="134">134</option><option value="135">135</option>
+<option value="136">136</option><option value="137">137</option>
+<option value="138">138</option><option value="139">139</option>
+<option value="140">140</option><option value="141">141</option>
+<option value="142">142</option><option value="143">143</option>
+<option value="144">144</option><option value="145">145</option>
+<option value="146">146</option><option value="147">147</option>
+<option value="148">148</option><option value="149">149</option>
+<option value="150">150</option><option value="151">151</option>
+<option value="152">152</option><option value="153">153</option>
+<option value="154">154</option><option value="155">155</option>
+<option value="156">156</option><option value="157">157</option>
+<option value="158">158</option><option value="159">159</option>
+<option value="160">160</option><option value="161">161</option>
+<option value="162">162</option><option value="163">163</option>
+<option value="164">164</option><option value="165">165</option>
+<option value="166">166</option><option value="167">167</option>
+<option value="168">168</option><option value="169">169</option>
+<option value="170">170</option><option value="171">171</option>
+<option value="172">172</option><option value="173">173</option>
+<option value="174">174</option><option value="175">175</option>
+<option value="176">176</option><option value="177">177</option>
+<option value="178">178</option><option value="179">179</option>
+<option value="180">180</option><option value="181">181</option>
+<option value="182">182</option><option value="183">183</option>
+<option value="184">184</option><option value="185">185</option>
+<option value="186">186</option><option value="187">187</option>
+<option value="188">188</option><option value="189">189</option>
+<option value="190">190</option><option value="191">191</option>
+<option value="192">192</option><option value="193">193</option>
+<option value="194">194</option><option value="195">195</option>
+<option value="196">196</option><option value="197">197</option>
+<option value="198">198</option><option value="199">199</option>
+<option value="200">200</option><option value="201">201</option>
+<option value="202">202</option><option value="203">203</option>
+<option value="204">204</option><option value="205">205</option>
+<option value="206">206</option><option value="207">207</option>
+<option value="208">208</option><option value="209">209</option>
+<option value="210">210</option><option value="211">211</option>
+<option value="212">212</option><option value="213">213</option>
+<option value="214">214</option><option value="215">215</option>
+<option value="216">216</option><option value="217">217</option>
+<option value="218">218</option><option value="219">219</option>
+<option value="220">220</option><option value="221">221</option>
+<option value="222">222</option><option value="223">223</option>
+<option value="224">224</option><option value="225">225</option>
+<option value="226">226</option><option value="227">227</option>
+<option value="228">228</option><option value="229">229</option>
+<option value="230">230</option><option value="231">231</option>
+<option value="232">232</option><option value="233">233</option>
+<option value="234">234</option><option value="235">235</option>
+<option value="236">236</option><option value="237">237</option>
+<option value="238">238</option><option value="239">239</option>
+<option value="240">240</option><option value="241">241</option>
+<option value="242">242</option><option value="243">243</option>
+<option value="244">244</option><option value="245">245</option>
+<option value="246">246</option><option value="247">247</option>
+<option value="248">248</option><option value="249">249</option>
+<option value="250">250</option><option value="251">251</option>
+<option value="252">252</option><option value="253">253</option>
+<option value="254">254</option><option value="255">255</option>
 </select>/256. <input type=button value="Generate" onClick=dropOddsChange()>
 <hr>
 Individual replacements:<br>
@@ -714,266 +1089,138 @@ Screen at column <select id="OWscreenCol">
 <option value="3">3</option>
 <option value="4">4</option>
 </select> key should be <select id="OWnewKey">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-<option value="61">61</option>
-<option value="62">62</option>
-<option value="63">63</option>
-<option value="64">64</option>
-<option value="65">65</option>
-<option value="66">66</option>
-<option value="67">67</option>
-<option value="68">68</option>
-<option value="69">69</option>
-<option value="70">70</option>
-<option value="71">71</option>
-<option value="72">72</option>
-<option value="73">73</option>
-<option value="74">74</option>
-<option value="75">75</option>
-<option value="76">76</option>
-<option value="77">77</option>
-<option value="78">78</option>
-<option value="79">79</option>
-<option value="80">80</option>
-<option value="81">81</option>
-<option value="82">82</option>
-<option value="83">83</option>
-<option value="84">84</option>
-<option value="85">85</option>
-<option value="86">86</option>
-<option value="87">87</option>
-<option value="88">88</option>
-<option value="89">89</option>
-<option value="90">90</option>
-<option value="91">91</option>
-<option value="92">92</option>
-<option value="93">93</option>
-<option value="94">94</option>
-<option value="95">95</option>
-<option value="96">96</option>
-<option value="97">97</option>
-<option value="98">98</option>
-<option value="99">99</option>
-<option value="100">100</option>
-<option value="101">101</option>
-<option value="102">102</option>
-<option value="103">103</option>
-<option value="104">104</option>
-<option value="105">105</option>
-<option value="106">106</option>
-<option value="107">107</option>
-<option value="108">108</option>
-<option value="109">109</option>
-<option value="110">110</option>
-<option value="111">111</option>
-<option value="112">112</option>
-<option value="113">113</option>
-<option value="114">114</option>
-<option value="115">115</option>
-<option value="116">116</option>
-<option value="117">117</option>
-<option value="118">118</option>
-<option value="119">119</option>
-<option value="120">120</option>
-<option value="121">121</option>
-<option value="122">122</option>
-<option value="123">123</option>
-<option value="124">124</option>
-<option value="125">125</option>
-<option value="126">126</option>
-<option value="127">127</option>
-<option value="128">128</option>
-<option value="129">129</option>
-<option value="130">130</option>
-<option value="131">131</option>
-<option value="132">132</option>
-<option value="133">133</option>
-<option value="134">134</option>
-<option value="135">135</option>
-<option value="136">136</option>
-<option value="137">137</option>
-<option value="138">138</option>
-<option value="139">139</option>
-<option value="140">140</option>
-<option value="141">141</option>
-<option value="142">142</option>
-<option value="143">143</option>
-<option value="144">144</option>
-<option value="145">145</option>
-<option value="146">146</option>
-<option value="147">147</option>
-<option value="148">148</option>
-<option value="149">149</option>
-<option value="150">150</option>
-<option value="151">151</option>
-<option value="152">152</option>
-<option value="153">153</option>
-<option value="154">154</option>
-<option value="155">155</option>
-<option value="156">156</option>
-<option value="157">157</option>
-<option value="158">158</option>
-<option value="159">159</option>
-<option value="160">160</option>
-<option value="161">161</option>
-<option value="162">162</option>
-<option value="163">163</option>
-<option value="164">164</option>
-<option value="165">165</option>
-<option value="166">166</option>
-<option value="167">167</option>
-<option value="168">168</option>
-<option value="169">169</option>
-<option value="170">170</option>
-<option value="171">171</option>
-<option value="172">172</option>
-<option value="173">173</option>
-<option value="174">174</option>
-<option value="175">175</option>
-<option value="176">176</option>
-<option value="177">177</option>
-<option value="178">178</option>
-<option value="179">179</option>
-<option value="180">180</option>
-<option value="181">181</option>
-<option value="182">182</option>
-<option value="183">183</option>
-<option value="184">184</option>
-<option value="185">185</option>
-<option value="186">186</option>
-<option value="187">187</option>
-<option value="188">188</option>
-<option value="189">189</option>
-<option value="190">190</option>
-<option value="191">191</option>
-<option value="192">192</option>
-<option value="193">193</option>
-<option value="194">194</option>
-<option value="195">195</option>
-<option value="196">196</option>
-<option value="197">197</option>
-<option value="198">198</option>
-<option value="199">199</option>
-<option value="200">200</option>
-<option value="201">201</option>
-<option value="202">202</option>
-<option value="203">203</option>
-<option value="204">204</option>
-<option value="205">205</option>
-<option value="206">206</option>
-<option value="207">207</option>
-<option value="208">208</option>
-<option value="209">209</option>
-<option value="210">210</option>
-<option value="211">211</option>
-<option value="212">212</option>
-<option value="213">213</option>
-<option value="214">214</option>
-<option value="215">215</option>
-<option value="216">216</option>
-<option value="217">217</option>
-<option value="218">218</option>
-<option value="219">219</option>
-<option value="220">220</option>
-<option value="221">221</option>
-<option value="222">222</option>
-<option value="223">223</option>
-<option value="224">224</option>
-<option value="225">225</option>
-<option value="226">226</option>
-<option value="227">227</option>
-<option value="228">228</option>
-<option value="229">229</option>
-<option value="230">230</option>
-<option value="231">231</option>
-<option value="232">232</option>
-<option value="233">233</option>
-<option value="234">234</option>
-<option value="235">235</option>
-<option value="236">236</option>
-<option value="237">237</option>
-<option value="238">238</option>
-<option value="239">239</option>
-<option value="240">240</option>
-<option value="241">241</option>
-<option value="242">242</option>
-<option value="243">243</option>
-<option value="244">244</option>
-<option value="245">245</option>
-<option value="246">246</option>
-<option value="247">247</option>
-<option value="248">248</option>
-<option value="249">249</option>
-<option value="250">250</option>
-<option value="251">251</option>
-<option value="252">252</option>
-<option value="253">253</option>
-<option value="254">254</option>
-<option value="255">255</option>
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
+<option value="30">30</option><option value="31">31</option>
+<option value="32">32</option><option value="33">33</option>
+<option value="34">34</option><option value="35">35</option>
+<option value="36">36</option><option value="37">37</option>
+<option value="38">38</option><option value="39">39</option>
+<option value="40">40</option><option value="41">41</option>
+<option value="42">42</option><option value="43">43</option>
+<option value="44">44</option><option value="45">45</option>
+<option value="46">46</option><option value="47">47</option>
+<option value="48">48</option><option value="49">49</option>
+<option value="50">50</option><option value="51">51</option>
+<option value="52">52</option><option value="53">53</option>
+<option value="54">54</option><option value="55">55</option>
+<option value="56">56</option><option value="57">57</option>
+<option value="58">58</option><option value="59">59</option>
+<option value="60">60</option><option value="61">61</option>
+<option value="62">62</option><option value="63">63</option>
+<option value="64">64</option><option value="65">65</option>
+<option value="66">66</option><option value="67">67</option>
+<option value="68">68</option><option value="69">69</option>
+<option value="70">70</option><option value="71">71</option>
+<option value="72">72</option><option value="73">73</option>
+<option value="74">74</option><option value="75">75</option>
+<option value="76">76</option><option value="77">77</option>
+<option value="78">78</option><option value="79">79</option>
+<option value="80">80</option><option value="81">81</option>
+<option value="82">82</option><option value="83">83</option>
+<option value="84">84</option><option value="85">85</option>
+<option value="86">86</option><option value="87">87</option>
+<option value="88">88</option><option value="89">89</option>
+<option value="90">90</option><option value="91">91</option>
+<option value="92">92</option><option value="93">93</option>
+<option value="94">94</option><option value="95">95</option>
+<option value="96">96</option><option value="97">97</option>
+<option value="98">98</option><option value="99">99</option>
+<option value="100">100</option><option value="101">101</option>
+<option value="102">102</option><option value="103">103</option>
+<option value="104">104</option><option value="105">105</option>
+<option value="106">106</option><option value="107">107</option>
+<option value="108">108</option><option value="109">109</option>
+<option value="110">110</option><option value="111">111</option>
+<option value="112">112</option><option value="113">113</option>
+<option value="114">114</option><option value="115">115</option>
+<option value="116">116</option><option value="117">117</option>
+<option value="118">118</option><option value="119">119</option>
+<option value="120">120</option><option value="121">121</option>
+<option value="122">122</option><option value="123">123</option>
+<option value="124">124</option><option value="125">125</option>
+<option value="126">126</option><option value="127">127</option>
+<option value="128">128</option><option value="129">129</option>
+<option value="130">130</option><option value="131">131</option>
+<option value="132">132</option><option value="133">133</option>
+<option value="134">134</option><option value="135">135</option>
+<option value="136">136</option><option value="137">137</option>
+<option value="138">138</option><option value="139">139</option>
+<option value="140">140</option><option value="141">141</option>
+<option value="142">142</option><option value="143">143</option>
+<option value="144">144</option><option value="145">145</option>
+<option value="146">146</option><option value="147">147</option>
+<option value="148">148</option><option value="149">149</option>
+<option value="150">150</option><option value="151">151</option>
+<option value="152">152</option><option value="153">153</option>
+<option value="154">154</option><option value="155">155</option>
+<option value="156">156</option><option value="157">157</option>
+<option value="158">158</option><option value="159">159</option>
+<option value="160">160</option><option value="161">161</option>
+<option value="162">162</option><option value="163">163</option>
+<option value="164">164</option><option value="165">165</option>
+<option value="166">166</option><option value="167">167</option>
+<option value="168">168</option><option value="169">169</option>
+<option value="170">170</option><option value="171">171</option>
+<option value="172">172</option><option value="173">173</option>
+<option value="174">174</option><option value="175">175</option>
+<option value="176">176</option><option value="177">177</option>
+<option value="178">178</option><option value="179">179</option>
+<option value="180">180</option><option value="181">181</option>
+<option value="182">182</option><option value="183">183</option>
+<option value="184">184</option><option value="185">185</option>
+<option value="186">186</option><option value="187">187</option>
+<option value="188">188</option><option value="189">189</option>
+<option value="190">190</option><option value="191">191</option>
+<option value="192">192</option><option value="193">193</option>
+<option value="194">194</option><option value="195">195</option>
+<option value="196">196</option><option value="197">197</option>
+<option value="198">198</option><option value="199">199</option>
+<option value="200">200</option><option value="201">201</option>
+<option value="202">202</option><option value="203">203</option>
+<option value="204">204</option><option value="205">205</option>
+<option value="206">206</option><option value="207">207</option>
+<option value="208">208</option><option value="209">209</option>
+<option value="210">210</option><option value="211">211</option>
+<option value="212">212</option><option value="213">213</option>
+<option value="214">214</option><option value="215">215</option>
+<option value="216">216</option><option value="217">217</option>
+<option value="218">218</option><option value="219">219</option>
+<option value="220">220</option><option value="221">221</option>
+<option value="222">222</option><option value="223">223</option>
+<option value="224">224</option><option value="225">225</option>
+<option value="226">226</option><option value="227">227</option>
+<option value="228">228</option><option value="229">229</option>
+<option value="230">230</option><option value="231">231</option>
+<option value="232">232</option><option value="233">233</option>
+<option value="234">234</option><option value="235">235</option>
+<option value="236">236</option><option value="237">237</option>
+<option value="238">238</option><option value="239">239</option>
+<option value="240">240</option><option value="241">241</option>
+<option value="242">242</option><option value="243">243</option>
+<option value="244">244</option><option value="245">245</option>
+<option value="246">246</option><option value="247">247</option>
+<option value="248">248</option><option value="249">249</option>
+<option value="250">250</option><option value="251">251</option>
+<option value="252">252</option><option value="253">253</option>
+<option value="254">254</option><option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=overworldChange()><br>
 <input type=button value="Load defaults" onClick=loadOWdefaults()> of selected screen.<br>
 <fieldset>
-<legend>Overworld properties - set 0</legend>
+<legend>Screen properties - set 0</legend>
 Horizontal position out of caves: <select id="set0HzPos">
 <option value="00">0</option>
 <option value="10">1</option>
@@ -1009,7 +1256,7 @@ Outer color palette: <select id="set0Palette">
 <input type=button value="Set key" onClick=set0KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Overworld properties - set 1</legend>
+<legend>Screen properties - set 1</legend>
 Cave destination: <select id="set1Dest">
 <option value="0">Overworld</option>
 <option value="1">Level 1</option>
@@ -1057,7 +1304,7 @@ Inner color palette: <select id="set1Palette">
 <input type=button value="Set key" onClick=set1KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Overworld properties - set 2</legend>
+<legend>Screen properties - set 2</legend>
 Quantity code: <select id="set2Quantity">
 <option value="0">0</option>
 <option value="1">1</option>
@@ -1133,7 +1380,7 @@ Enemy code: <select id="set2Enemy">
 <input type=button value="Set key" onClick=set2KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Overworld properties - set 3</legend>
+<legend>Screen properties - set 3</legend>
 Enemy table: <select id="set3Mixed">
 <option value="00">Normal</option>
 <option value="80">Special</option>
@@ -1264,7 +1511,7 @@ Screen code: <select id="set3Screen">
 <input type=button value="Set key" onClick=set3KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Overworld properties - set 4</legend>
+<legend>Screen properties - set 4</legend>
 Secret availability: <select id="set4Open">
 <option value="0">Both quests</option>
 <option value="1">1st only</option>
@@ -1319,262 +1566,134 @@ Vertical position out of caves: <select id="set4VtPos">
 <option value="1">1</option>
 <option value="2">2</option>
 </select> key should be <select id="caveNewKey">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-<option value="61">61</option>
-<option value="62">62</option>
-<option value="63">63</option>
-<option value="64">64</option>
-<option value="65">65</option>
-<option value="66">66</option>
-<option value="67">67</option>
-<option value="68">68</option>
-<option value="69">69</option>
-<option value="70">70</option>
-<option value="71">71</option>
-<option value="72">72</option>
-<option value="73">73</option>
-<option value="74">74</option>
-<option value="75">75</option>
-<option value="76">76</option>
-<option value="77">77</option>
-<option value="78">78</option>
-<option value="79">79</option>
-<option value="80">80</option>
-<option value="81">81</option>
-<option value="82">82</option>
-<option value="83">83</option>
-<option value="84">84</option>
-<option value="85">85</option>
-<option value="86">86</option>
-<option value="87">87</option>
-<option value="88">88</option>
-<option value="89">89</option>
-<option value="90">90</option>
-<option value="91">91</option>
-<option value="92">92</option>
-<option value="93">93</option>
-<option value="94">94</option>
-<option value="95">95</option>
-<option value="96">96</option>
-<option value="97">97</option>
-<option value="98">98</option>
-<option value="99">99</option>
-<option value="100">100</option>
-<option value="101">101</option>
-<option value="102">102</option>
-<option value="103">103</option>
-<option value="104">104</option>
-<option value="105">105</option>
-<option value="106">106</option>
-<option value="107">107</option>
-<option value="108">108</option>
-<option value="109">109</option>
-<option value="110">110</option>
-<option value="111">111</option>
-<option value="112">112</option>
-<option value="113">113</option>
-<option value="114">114</option>
-<option value="115">115</option>
-<option value="116">116</option>
-<option value="117">117</option>
-<option value="118">118</option>
-<option value="119">119</option>
-<option value="120">120</option>
-<option value="121">121</option>
-<option value="122">122</option>
-<option value="123">123</option>
-<option value="124">124</option>
-<option value="125">125</option>
-<option value="126">126</option>
-<option value="127">127</option>
-<option value="128">128</option>
-<option value="129">129</option>
-<option value="130">130</option>
-<option value="131">131</option>
-<option value="132">132</option>
-<option value="133">133</option>
-<option value="134">134</option>
-<option value="135">135</option>
-<option value="136">136</option>
-<option value="137">137</option>
-<option value="138">138</option>
-<option value="139">139</option>
-<option value="140">140</option>
-<option value="141">141</option>
-<option value="142">142</option>
-<option value="143">143</option>
-<option value="144">144</option>
-<option value="145">145</option>
-<option value="146">146</option>
-<option value="147">147</option>
-<option value="148">148</option>
-<option value="149">149</option>
-<option value="150">150</option>
-<option value="151">151</option>
-<option value="152">152</option>
-<option value="153">153</option>
-<option value="154">154</option>
-<option value="155">155</option>
-<option value="156">156</option>
-<option value="157">157</option>
-<option value="158">158</option>
-<option value="159">159</option>
-<option value="160">160</option>
-<option value="161">161</option>
-<option value="162">162</option>
-<option value="163">163</option>
-<option value="164">164</option>
-<option value="165">165</option>
-<option value="166">166</option>
-<option value="167">167</option>
-<option value="168">168</option>
-<option value="169">169</option>
-<option value="170">170</option>
-<option value="171">171</option>
-<option value="172">172</option>
-<option value="173">173</option>
-<option value="174">174</option>
-<option value="175">175</option>
-<option value="176">176</option>
-<option value="177">177</option>
-<option value="178">178</option>
-<option value="179">179</option>
-<option value="180">180</option>
-<option value="181">181</option>
-<option value="182">182</option>
-<option value="183">183</option>
-<option value="184">184</option>
-<option value="185">185</option>
-<option value="186">186</option>
-<option value="187">187</option>
-<option value="188">188</option>
-<option value="189">189</option>
-<option value="190">190</option>
-<option value="191">191</option>
-<option value="192">192</option>
-<option value="193">193</option>
-<option value="194">194</option>
-<option value="195">195</option>
-<option value="196">196</option>
-<option value="197">197</option>
-<option value="198">198</option>
-<option value="199">199</option>
-<option value="200">200</option>
-<option value="201">201</option>
-<option value="202">202</option>
-<option value="203">203</option>
-<option value="204">204</option>
-<option value="205">205</option>
-<option value="206">206</option>
-<option value="207">207</option>
-<option value="208">208</option>
-<option value="209">209</option>
-<option value="210">210</option>
-<option value="211">211</option>
-<option value="212">212</option>
-<option value="213">213</option>
-<option value="214">214</option>
-<option value="215">215</option>
-<option value="216">216</option>
-<option value="217">217</option>
-<option value="218">218</option>
-<option value="219">219</option>
-<option value="220">220</option>
-<option value="221">221</option>
-<option value="222">222</option>
-<option value="223">223</option>
-<option value="224">224</option>
-<option value="225">225</option>
-<option value="226">226</option>
-<option value="227">227</option>
-<option value="228">228</option>
-<option value="229">229</option>
-<option value="230">230</option>
-<option value="231">231</option>
-<option value="232">232</option>
-<option value="233">233</option>
-<option value="234">234</option>
-<option value="235">235</option>
-<option value="236">236</option>
-<option value="237">237</option>
-<option value="238">238</option>
-<option value="239">239</option>
-<option value="240">240</option>
-<option value="241">241</option>
-<option value="242">242</option>
-<option value="243">243</option>
-<option value="244">244</option>
-<option value="245">245</option>
-<option value="246">246</option>
-<option value="247">247</option>
-<option value="248">248</option>
-<option value="249">249</option>
-<option value="250">250</option>
-<option value="251">251</option>
-<option value="252">252</option>
-<option value="253">253</option>
-<option value="254">254</option>
-<option value="255">255</option>
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
+<option value="30">30</option><option value="31">31</option>
+<option value="32">32</option><option value="33">33</option>
+<option value="34">34</option><option value="35">35</option>
+<option value="36">36</option><option value="37">37</option>
+<option value="38">38</option><option value="39">39</option>
+<option value="40">40</option><option value="41">41</option>
+<option value="42">42</option><option value="43">43</option>
+<option value="44">44</option><option value="45">45</option>
+<option value="46">46</option><option value="47">47</option>
+<option value="48">48</option><option value="49">49</option>
+<option value="50">50</option><option value="51">51</option>
+<option value="52">52</option><option value="53">53</option>
+<option value="54">54</option><option value="55">55</option>
+<option value="56">56</option><option value="57">57</option>
+<option value="58">58</option><option value="59">59</option>
+<option value="60">60</option><option value="61">61</option>
+<option value="62">62</option><option value="63">63</option>
+<option value="64">64</option><option value="65">65</option>
+<option value="66">66</option><option value="67">67</option>
+<option value="68">68</option><option value="69">69</option>
+<option value="70">70</option><option value="71">71</option>
+<option value="72">72</option><option value="73">73</option>
+<option value="74">74</option><option value="75">75</option>
+<option value="76">76</option><option value="77">77</option>
+<option value="78">78</option><option value="79">79</option>
+<option value="80">80</option><option value="81">81</option>
+<option value="82">82</option><option value="83">83</option>
+<option value="84">84</option><option value="85">85</option>
+<option value="86">86</option><option value="87">87</option>
+<option value="88">88</option><option value="89">89</option>
+<option value="90">90</option><option value="91">91</option>
+<option value="92">92</option><option value="93">93</option>
+<option value="94">94</option><option value="95">95</option>
+<option value="96">96</option><option value="97">97</option>
+<option value="98">98</option><option value="99">99</option>
+<option value="100">100</option><option value="101">101</option>
+<option value="102">102</option><option value="103">103</option>
+<option value="104">104</option><option value="105">105</option>
+<option value="106">106</option><option value="107">107</option>
+<option value="108">108</option><option value="109">109</option>
+<option value="110">110</option><option value="111">111</option>
+<option value="112">112</option><option value="113">113</option>
+<option value="114">114</option><option value="115">115</option>
+<option value="116">116</option><option value="117">117</option>
+<option value="118">118</option><option value="119">119</option>
+<option value="120">120</option><option value="121">121</option>
+<option value="122">122</option><option value="123">123</option>
+<option value="124">124</option><option value="125">125</option>
+<option value="126">126</option><option value="127">127</option>
+<option value="128">128</option><option value="129">129</option>
+<option value="130">130</option><option value="131">131</option>
+<option value="132">132</option><option value="133">133</option>
+<option value="134">134</option><option value="135">135</option>
+<option value="136">136</option><option value="137">137</option>
+<option value="138">138</option><option value="139">139</option>
+<option value="140">140</option><option value="141">141</option>
+<option value="142">142</option><option value="143">143</option>
+<option value="144">144</option><option value="145">145</option>
+<option value="146">146</option><option value="147">147</option>
+<option value="148">148</option><option value="149">149</option>
+<option value="150">150</option><option value="151">151</option>
+<option value="152">152</option><option value="153">153</option>
+<option value="154">154</option><option value="155">155</option>
+<option value="156">156</option><option value="157">157</option>
+<option value="158">158</option><option value="159">159</option>
+<option value="160">160</option><option value="161">161</option>
+<option value="162">162</option><option value="163">163</option>
+<option value="164">164</option><option value="165">165</option>
+<option value="166">166</option><option value="167">167</option>
+<option value="168">168</option><option value="169">169</option>
+<option value="170">170</option><option value="171">171</option>
+<option value="172">172</option><option value="173">173</option>
+<option value="174">174</option><option value="175">175</option>
+<option value="176">176</option><option value="177">177</option>
+<option value="178">178</option><option value="179">179</option>
+<option value="180">180</option><option value="181">181</option>
+<option value="182">182</option><option value="183">183</option>
+<option value="184">184</option><option value="185">185</option>
+<option value="186">186</option><option value="187">187</option>
+<option value="188">188</option><option value="189">189</option>
+<option value="190">190</option><option value="191">191</option>
+<option value="192">192</option><option value="193">193</option>
+<option value="194">194</option><option value="195">195</option>
+<option value="196">196</option><option value="197">197</option>
+<option value="198">198</option><option value="199">199</option>
+<option value="200">200</option><option value="201">201</option>
+<option value="202">202</option><option value="203">203</option>
+<option value="204">204</option><option value="205">205</option>
+<option value="206">206</option><option value="207">207</option>
+<option value="208">208</option><option value="209">209</option>
+<option value="210">210</option><option value="211">211</option>
+<option value="212">212</option><option value="213">213</option>
+<option value="214">214</option><option value="215">215</option>
+<option value="216">216</option><option value="217">217</option>
+<option value="218">218</option><option value="219">219</option>
+<option value="220">220</option><option value="221">221</option>
+<option value="222">222</option><option value="223">223</option>
+<option value="224">224</option><option value="225">225</option>
+<option value="226">226</option><option value="227">227</option>
+<option value="228">228</option><option value="229">229</option>
+<option value="230">230</option><option value="231">231</option>
+<option value="232">232</option><option value="233">233</option>
+<option value="234">234</option><option value="235">235</option>
+<option value="236">236</option><option value="237">237</option>
+<option value="238">238</option><option value="239">239</option>
+<option value="240">240</option><option value="241">241</option>
+<option value="242">242</option><option value="243">243</option>
+<option value="244">244</option><option value="245">245</option>
+<option value="246">246</option><option value="247">247</option>
+<option value="248">248</option><option value="249">249</option>
+<option value="250">250</option><option value="251">251</option>
+<option value="252">252</option><option value="253">253</option>
+<option value="254">254</option><option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=caveChange()><br>
 <input type=button value="Load defaults" onClick=loadCaveDefaults()> of selected cave.<br>
 <fieldset>
@@ -1852,271 +1971,143 @@ Rightmost item: <select id="Cset2ri">
 <option value="4">4</option>
 <option value="5">5</option>
 </select> key should be <select id="DnewKey">
-<option value="0">0</option>
-<option value="1">1</option>
-<option value="2">2</option>
-<option value="3">3</option>
-<option value="4">4</option>
-<option value="5">5</option>
-<option value="6">6</option>
-<option value="7">7</option>
-<option value="8">8</option>
-<option value="9">9</option>
-<option value="10">10</option>
-<option value="11">11</option>
-<option value="12">12</option>
-<option value="13">13</option>
-<option value="14">14</option>
-<option value="15">15</option>
-<option value="16">16</option>
-<option value="17">17</option>
-<option value="18">18</option>
-<option value="19">19</option>
-<option value="20">20</option>
-<option value="21">21</option>
-<option value="22">22</option>
-<option value="23">23</option>
-<option value="24">24</option>
-<option value="25">25</option>
-<option value="26">26</option>
-<option value="27">27</option>
-<option value="28">28</option>
-<option value="29">29</option>
-<option value="30">30</option>
-<option value="31">31</option>
-<option value="32">32</option>
-<option value="33">33</option>
-<option value="34">34</option>
-<option value="35">35</option>
-<option value="36">36</option>
-<option value="37">37</option>
-<option value="38">38</option>
-<option value="39">39</option>
-<option value="40">40</option>
-<option value="41">41</option>
-<option value="42">42</option>
-<option value="43">43</option>
-<option value="44">44</option>
-<option value="45">45</option>
-<option value="46">46</option>
-<option value="47">47</option>
-<option value="48">48</option>
-<option value="49">49</option>
-<option value="50">50</option>
-<option value="51">51</option>
-<option value="52">52</option>
-<option value="53">53</option>
-<option value="54">54</option>
-<option value="55">55</option>
-<option value="56">56</option>
-<option value="57">57</option>
-<option value="58">58</option>
-<option value="59">59</option>
-<option value="60">60</option>
-<option value="61">61</option>
-<option value="62">62</option>
-<option value="63">63</option>
-<option value="64">64</option>
-<option value="65">65</option>
-<option value="66">66</option>
-<option value="67">67</option>
-<option value="68">68</option>
-<option value="69">69</option>
-<option value="70">70</option>
-<option value="71">71</option>
-<option value="72">72</option>
-<option value="73">73</option>
-<option value="74">74</option>
-<option value="75">75</option>
-<option value="76">76</option>
-<option value="77">77</option>
-<option value="78">78</option>
-<option value="79">79</option>
-<option value="80">80</option>
-<option value="81">81</option>
-<option value="82">82</option>
-<option value="83">83</option>
-<option value="84">84</option>
-<option value="85">85</option>
-<option value="86">86</option>
-<option value="87">87</option>
-<option value="88">88</option>
-<option value="89">89</option>
-<option value="90">90</option>
-<option value="91">91</option>
-<option value="92">92</option>
-<option value="93">93</option>
-<option value="94">94</option>
-<option value="95">95</option>
-<option value="96">96</option>
-<option value="97">97</option>
-<option value="98">98</option>
-<option value="99">99</option>
-<option value="100">100</option>
-<option value="101">101</option>
-<option value="102">102</option>
-<option value="103">103</option>
-<option value="104">104</option>
-<option value="105">105</option>
-<option value="106">106</option>
-<option value="107">107</option>
-<option value="108">108</option>
-<option value="109">109</option>
-<option value="110">110</option>
-<option value="111">111</option>
-<option value="112">112</option>
-<option value="113">113</option>
-<option value="114">114</option>
-<option value="115">115</option>
-<option value="116">116</option>
-<option value="117">117</option>
-<option value="118">118</option>
-<option value="119">119</option>
-<option value="120">120</option>
-<option value="121">121</option>
-<option value="122">122</option>
-<option value="123">123</option>
-<option value="124">124</option>
-<option value="125">125</option>
-<option value="126">126</option>
-<option value="127">127</option>
-<option value="128">128</option>
-<option value="129">129</option>
-<option value="130">130</option>
-<option value="131">131</option>
-<option value="132">132</option>
-<option value="133">133</option>
-<option value="134">134</option>
-<option value="135">135</option>
-<option value="136">136</option>
-<option value="137">137</option>
-<option value="138">138</option>
-<option value="139">139</option>
-<option value="140">140</option>
-<option value="141">141</option>
-<option value="142">142</option>
-<option value="143">143</option>
-<option value="144">144</option>
-<option value="145">145</option>
-<option value="146">146</option>
-<option value="147">147</option>
-<option value="148">148</option>
-<option value="149">149</option>
-<option value="150">150</option>
-<option value="151">151</option>
-<option value="152">152</option>
-<option value="153">153</option>
-<option value="154">154</option>
-<option value="155">155</option>
-<option value="156">156</option>
-<option value="157">157</option>
-<option value="158">158</option>
-<option value="159">159</option>
-<option value="160">160</option>
-<option value="161">161</option>
-<option value="162">162</option>
-<option value="163">163</option>
-<option value="164">164</option>
-<option value="165">165</option>
-<option value="166">166</option>
-<option value="167">167</option>
-<option value="168">168</option>
-<option value="169">169</option>
-<option value="170">170</option>
-<option value="171">171</option>
-<option value="172">172</option>
-<option value="173">173</option>
-<option value="174">174</option>
-<option value="175">175</option>
-<option value="176">176</option>
-<option value="177">177</option>
-<option value="178">178</option>
-<option value="179">179</option>
-<option value="180">180</option>
-<option value="181">181</option>
-<option value="182">182</option>
-<option value="183">183</option>
-<option value="184">184</option>
-<option value="185">185</option>
-<option value="186">186</option>
-<option value="187">187</option>
-<option value="188">188</option>
-<option value="189">189</option>
-<option value="190">190</option>
-<option value="191">191</option>
-<option value="192">192</option>
-<option value="193">193</option>
-<option value="194">194</option>
-<option value="195">195</option>
-<option value="196">196</option>
-<option value="197">197</option>
-<option value="198">198</option>
-<option value="199">199</option>
-<option value="200">200</option>
-<option value="201">201</option>
-<option value="202">202</option>
-<option value="203">203</option>
-<option value="204">204</option>
-<option value="205">205</option>
-<option value="206">206</option>
-<option value="207">207</option>
-<option value="208">208</option>
-<option value="209">209</option>
-<option value="210">210</option>
-<option value="211">211</option>
-<option value="212">212</option>
-<option value="213">213</option>
-<option value="214">214</option>
-<option value="215">215</option>
-<option value="216">216</option>
-<option value="217">217</option>
-<option value="218">218</option>
-<option value="219">219</option>
-<option value="220">220</option>
-<option value="221">221</option>
-<option value="222">222</option>
-<option value="223">223</option>
-<option value="224">224</option>
-<option value="225">225</option>
-<option value="226">226</option>
-<option value="227">227</option>
-<option value="228">228</option>
-<option value="229">229</option>
-<option value="230">230</option>
-<option value="231">231</option>
-<option value="232">232</option>
-<option value="233">233</option>
-<option value="234">234</option>
-<option value="235">235</option>
-<option value="236">236</option>
-<option value="237">237</option>
-<option value="238">238</option>
-<option value="239">239</option>
-<option value="240">240</option>
-<option value="241">241</option>
-<option value="242">242</option>
-<option value="243">243</option>
-<option value="244">244</option>
-<option value="245">245</option>
-<option value="246">246</option>
-<option value="247">247</option>
-<option value="248">248</option>
-<option value="249">249</option>
-<option value="250">250</option>
-<option value="251">251</option>
-<option value="252">252</option>
-<option value="253">253</option>
-<option value="254">254</option>
-<option value="255">255</option>
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
+<option value="30">30</option><option value="31">31</option>
+<option value="32">32</option><option value="33">33</option>
+<option value="34">34</option><option value="35">35</option>
+<option value="36">36</option><option value="37">37</option>
+<option value="38">38</option><option value="39">39</option>
+<option value="40">40</option><option value="41">41</option>
+<option value="42">42</option><option value="43">43</option>
+<option value="44">44</option><option value="45">45</option>
+<option value="46">46</option><option value="47">47</option>
+<option value="48">48</option><option value="49">49</option>
+<option value="50">50</option><option value="51">51</option>
+<option value="52">52</option><option value="53">53</option>
+<option value="54">54</option><option value="55">55</option>
+<option value="56">56</option><option value="57">57</option>
+<option value="58">58</option><option value="59">59</option>
+<option value="60">60</option><option value="61">61</option>
+<option value="62">62</option><option value="63">63</option>
+<option value="64">64</option><option value="65">65</option>
+<option value="66">66</option><option value="67">67</option>
+<option value="68">68</option><option value="69">69</option>
+<option value="70">70</option><option value="71">71</option>
+<option value="72">72</option><option value="73">73</option>
+<option value="74">74</option><option value="75">75</option>
+<option value="76">76</option><option value="77">77</option>
+<option value="78">78</option><option value="79">79</option>
+<option value="80">80</option><option value="81">81</option>
+<option value="82">82</option><option value="83">83</option>
+<option value="84">84</option><option value="85">85</option>
+<option value="86">86</option><option value="87">87</option>
+<option value="88">88</option><option value="89">89</option>
+<option value="90">90</option><option value="91">91</option>
+<option value="92">92</option><option value="93">93</option>
+<option value="94">94</option><option value="95">95</option>
+<option value="96">96</option><option value="97">97</option>
+<option value="98">98</option><option value="99">99</option>
+<option value="100">100</option><option value="101">101</option>
+<option value="102">102</option><option value="103">103</option>
+<option value="104">104</option><option value="105">105</option>
+<option value="106">106</option><option value="107">107</option>
+<option value="108">108</option><option value="109">109</option>
+<option value="110">110</option><option value="111">111</option>
+<option value="112">112</option><option value="113">113</option>
+<option value="114">114</option><option value="115">115</option>
+<option value="116">116</option><option value="117">117</option>
+<option value="118">118</option><option value="119">119</option>
+<option value="120">120</option><option value="121">121</option>
+<option value="122">122</option><option value="123">123</option>
+<option value="124">124</option><option value="125">125</option>
+<option value="126">126</option><option value="127">127</option>
+<option value="128">128</option><option value="129">129</option>
+<option value="130">130</option><option value="131">131</option>
+<option value="132">132</option><option value="133">133</option>
+<option value="134">134</option><option value="135">135</option>
+<option value="136">136</option><option value="137">137</option>
+<option value="138">138</option><option value="139">139</option>
+<option value="140">140</option><option value="141">141</option>
+<option value="142">142</option><option value="143">143</option>
+<option value="144">144</option><option value="145">145</option>
+<option value="146">146</option><option value="147">147</option>
+<option value="148">148</option><option value="149">149</option>
+<option value="150">150</option><option value="151">151</option>
+<option value="152">152</option><option value="153">153</option>
+<option value="154">154</option><option value="155">155</option>
+<option value="156">156</option><option value="157">157</option>
+<option value="158">158</option><option value="159">159</option>
+<option value="160">160</option><option value="161">161</option>
+<option value="162">162</option><option value="163">163</option>
+<option value="164">164</option><option value="165">165</option>
+<option value="166">166</option><option value="167">167</option>
+<option value="168">168</option><option value="169">169</option>
+<option value="170">170</option><option value="171">171</option>
+<option value="172">172</option><option value="173">173</option>
+<option value="174">174</option><option value="175">175</option>
+<option value="176">176</option><option value="177">177</option>
+<option value="178">178</option><option value="179">179</option>
+<option value="180">180</option><option value="181">181</option>
+<option value="182">182</option><option value="183">183</option>
+<option value="184">184</option><option value="185">185</option>
+<option value="186">186</option><option value="187">187</option>
+<option value="188">188</option><option value="189">189</option>
+<option value="190">190</option><option value="191">191</option>
+<option value="192">192</option><option value="193">193</option>
+<option value="194">194</option><option value="195">195</option>
+<option value="196">196</option><option value="197">197</option>
+<option value="198">198</option><option value="199">199</option>
+<option value="200">200</option><option value="201">201</option>
+<option value="202">202</option><option value="203">203</option>
+<option value="204">204</option><option value="205">205</option>
+<option value="206">206</option><option value="207">207</option>
+<option value="208">208</option><option value="209">209</option>
+<option value="210">210</option><option value="211">211</option>
+<option value="212">212</option><option value="213">213</option>
+<option value="214">214</option><option value="215">215</option>
+<option value="216">216</option><option value="217">217</option>
+<option value="218">218</option><option value="219">219</option>
+<option value="220">220</option><option value="221">221</option>
+<option value="222">222</option><option value="223">223</option>
+<option value="224">224</option><option value="225">225</option>
+<option value="226">226</option><option value="227">227</option>
+<option value="228">228</option><option value="229">229</option>
+<option value="230">230</option><option value="231">231</option>
+<option value="232">232</option><option value="233">233</option>
+<option value="234">234</option><option value="235">235</option>
+<option value="236">236</option><option value="237">237</option>
+<option value="238">238</option><option value="239">239</option>
+<option value="240">240</option><option value="241">241</option>
+<option value="242">242</option><option value="243">243</option>
+<option value="244">244</option><option value="245">245</option>
+<option value="246">246</option><option value="247">247</option>
+<option value="248">248</option><option value="249">249</option>
+<option value="250">250</option><option value="251">251</option>
+<option value="252">252</option><option value="253">253</option>
+<option value="254">254</option><option value="255">255</option>
 </select>. <input type=button value="Generate" onClick=dungeonChange()><br>
 <input type=button value="Load defaults" onClick=loadDungeonDefaults()> of selected quest/map/room.<br>
 <fieldset>
-<legend>Dungeon properties - set 0</legend>
+<legend>Room properties - set 0</legend>
 <b>If normal room:</b><br>
 Top wall: <select id="Dset0tw">
 <option value="0">Open door</option>
 <option value="1">Solid wall</option>
-<option value="2">2</option>
+<option value="2">False wall</option>
 <option value="3">3</option>
 <option value="4">Bombable</option>
 <option value="5">Key-door</option>
@@ -2126,7 +2117,7 @@ Top wall: <select id="Dset0tw">
 Bottom wall: <select id="Dset0bw">
 <option value="0">Open door</option>
 <option value="1">Solid wall</option>
-<option value="2">2</option>
+<option value="2">False wall</option>
 <option value="3">3</option>
 <option value="4">Bombable</option>
 <option value="5">Key-door</option>
@@ -2176,12 +2167,12 @@ Left exit room: column <select id="Dset0lerc">
 <input type=button value="Set key" onClick=dungeonSet0KeyGenU()>
 </fieldset>
 <fieldset>
-<legend>Dungeon properties - set 1</legend>
+<legend>Room properties - set 1</legend>
 <b>If normal room:</b><br>
 Left wall: <select id="Dset1lw">
 <option value="0">Open door</option>
 <option value="1">Solid wall</option>
-<option value="2">2</option>
+<option value="2">False wall</option>
 <option value="3">3</option>
 <option value="4">Bombable</option>
 <option value="5">Key-door</option>
@@ -2191,7 +2182,7 @@ Left wall: <select id="Dset1lw">
 Right wall: <select id="Dset1rw">
 <option value="0">Open door</option>
 <option value="1">Solid wall</option>
-<option value="2">2</option>
+<option value="2">False wall</option>
 <option value="3">3</option>
 <option value="4">Bombable</option>
 <option value="5">Key-door</option>
@@ -2241,7 +2232,7 @@ Right exit room: column <select id="Dset1rerc">
 <input type=button value="Set key" onClick=dungeonSet1KeyGenU()>
 </fieldset>
 <fieldset>
-<legend>Dungeon properties - set 2</legend>
+<legend>Room properties - set 2</legend>
 <b>If normal room:</b><br>
 Quantity code: <select id="Dset2qc">
 <option value="0">0</option>
@@ -2357,7 +2348,7 @@ Y position out of underground: <select id="Dset2Yp">
 <input type=button value="Set key" onClick=dungeonSet2KeyGenU()>
 </fieldset>
 <fieldset>
-<legend>Dungeon properties - set 3</legend>
+<legend>Room properties - set 3</legend>
 Enemy table: <select id="Dset3et">
 <option value="00">Normal</option>
 <option value="80">Special</option>
@@ -2435,7 +2426,7 @@ Screen code: <select id="Dset3sc">
 <input type=button value="Set key" onClick=dungeonSet3KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Dungeon properties - set 4</legend>
+<legend>Room properties - set 4</legend>
 Darkness: <select id="Dset4d">
 <option value="00">No</option>
 <option value="80">Yes</option>
@@ -2483,7 +2474,7 @@ Room item: <select id="Dset4ri">
 <input type=button value="Set key" onClick=dungeonSet4KeyGen()>
 </fieldset>
 <fieldset>
-<legend>Dungeon properties - set 5</legend>
+<legend>Room properties - set 5</legend>
 Unused1: <select id="Dset5u1">
 <option value="0">0</option>
 <option value="1">1</option>
@@ -2514,5 +2505,204 @@ Shutters open/stairway appears when cleared: <select id="Dset5sosawc">
 </select><br>
 <input type=button value="Set key" onClick=dungeonSet5KeyGen()>
 </fieldset>
+<h2>Screen tiling</h2>
+<select id="Tscreen">
+<option>Title screen</option>
+<option>Intro story</option>
+</select>, column <select id="Tcol">
+<option>0</option>
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+<option>8</option>
+<option>9</option>
+<option>10</option>
+<option>11</option>
+<option>12</option>
+<option>13</option>
+<option>14</option>
+<option>15</option>
+<option>16</option>
+<option>17</option>
+<option>18</option>
+<option>19</option>
+<option>20</option>
+<option>21</option>
+<option>22</option>
+<option>23</option>
+<option>24</option>
+<option>25</option>
+<option>26</option>
+<option>27</option>
+<option>28</option>
+<option>29</option>
+<option>30</option>
+<option>31</option>
+</select>, row <select id="Trow">
+<option value="0">0</option>
+<option value="1">1</option>
+<option value="2">2</option>
+<option value="3">3</option>
+<option value="4">4</option>
+<option value="5">5</option>
+<option value="6">6</option>
+<option value="7">7</option>
+<option value="8">8</option>
+<option value="9">9</option>
+<option value="10">10</option>
+<option value="11">11</option>
+<option value="12">12</option>
+<option value="13">13</option>
+<option value="14">14</option>
+<option value="15">15</option>
+<option value="16">16</option>
+<option value="17">17</option>
+<option value="18">18</option>
+<option value="19">19</option>
+<option value="20">20</option>
+<option value="21">21</option>
+<option value="22">22</option>
+<option value="23">23</option>
+<option value="24">24</option>
+<option value="25">25</option>
+<option value="26">26</option>
+<option value="27">27</option>
+<option value="28">28</option>
+<option value="29">29</option>
+</select>; tile ID should be <select id="Tid">
+<option value="0">0</option><option value="1">1</option>
+<option value="2">2</option><option value="3">3</option>
+<option value="4">4</option><option value="5">5</option>
+<option value="6">6</option><option value="7">7</option>
+<option value="8">8</option><option value="9">9</option>
+<option value="A">A</option><option value="B">B</option>
+<option value="C">C</option><option value="D">D</option>
+<option value="E">E</option><option value="F">F</option>
+<option value="10">10</option><option value="11">11</option>
+<option value="12">12</option><option value="13">13</option>
+<option value="14">14</option><option value="15">15</option>
+<option value="16">16</option><option value="17">17</option>
+<option value="18">18</option><option value="19">19</option>
+<option value="1A">1A</option><option value="1B">1B</option>
+<option value="1C">1C</option><option value="1D">1D</option>
+<option value="1E">1E</option><option value="1F">1F</option>
+<option value="20">20</option><option value="21">21</option>
+<option value="22">22</option><option value="23">23</option>
+<option value="24">24</option><option value="25">25</option>
+<option value="26">26</option><option value="27">27</option>
+<option value="28">28</option><option value="29">29</option>
+<option value="2A">2A</option><option value="2B">2B</option>
+<option value="2C">2C</option><option value="2D">2D</option>
+<option value="2E">2E</option><option value="2F">2F</option>
+<option value="30">30</option><option value="31">31</option>
+<option value="32">32</option><option value="33">33</option>
+<option value="34">34</option><option value="35">35</option>
+<option value="36">36</option><option value="37">37</option>
+<option value="38">38</option><option value="39">39</option>
+<option value="3A">3A</option><option value="3B">3B</option>
+<option value="3C">3C</option><option value="3D">3D</option>
+<option value="3E">3E</option><option value="3F">3F</option>
+<option value="40">40</option><option value="41">41</option>
+<option value="42">42</option><option value="43">43</option>
+<option value="44">44</option><option value="45">45</option>
+<option value="46">46</option><option value="47">47</option>
+<option value="48">48</option><option value="49">49</option>
+<option value="4A">4A</option><option value="4B">4B</option>
+<option value="4C">4C</option><option value="4D">4D</option>
+<option value="4E">4E</option><option value="4F">4F</option>
+<option value="50">50</option><option value="51">51</option>
+<option value="52">52</option><option value="53">53</option>
+<option value="54">54</option><option value="55">55</option>
+<option value="56">56</option><option value="57">57</option>
+<option value="58">58</option><option value="59">59</option>
+<option value="5A">5A</option><option value="5B">5B</option>
+<option value="5C">5C</option><option value="5D">5D</option>
+<option value="5E">5E</option><option value="5F">5F</option>
+<option value="60">60</option><option value="61">61</option>
+<option value="62">62</option><option value="63">63</option>
+<option value="64">64</option><option value="65">65</option>
+<option value="66">66</option><option value="67">67</option>
+<option value="68">68</option><option value="69">69</option>
+<option value="6A">6A</option><option value="6B">6B</option>
+<option value="6C">6C</option><option value="6D">6D</option>
+<option value="6E">6E</option><option value="6F">6F</option>
+<option value="70">70</option><option value="71">71</option>
+<option value="72">72</option><option value="73">73</option>
+<option value="74">74</option><option value="75">75</option>
+<option value="76">76</option><option value="77">77</option>
+<option value="78">78</option><option value="79">79</option>
+<option value="7A">7A</option><option value="7B">7B</option>
+<option value="7C">7C</option><option value="7D">7D</option>
+<option value="7E">7E</option><option value="7F">7F</option>
+<option value="80">80</option><option value="81">81</option>
+<option value="82">82</option><option value="83">83</option>
+<option value="84">84</option><option value="85">85</option>
+<option value="86">86</option><option value="87">87</option>
+<option value="88">88</option><option value="89">89</option>
+<option value="8A">8A</option><option value="8B">8B</option>
+<option value="8C">8C</option><option value="8D">8D</option>
+<option value="8E">8E</option><option value="8F">8F</option>
+<option value="90">90</option><option value="91">91</option>
+<option value="92">92</option><option value="93">93</option>
+<option value="94">94</option><option value="95">95</option>
+<option value="96">96</option><option value="97">97</option>
+<option value="98">98</option><option value="99">99</option>
+<option value="9A">9A</option><option value="9B">9B</option>
+<option value="9C">9C</option><option value="9D">9D</option>
+<option value="9E">9E</option><option value="9F">9F</option>
+<option value="A0">A0</option><option value="A1">A1</option>
+<option value="A2">A2</option><option value="A3">A3</option>
+<option value="A4">A4</option><option value="A5">A5</option>
+<option value="A6">A6</option><option value="A7">A7</option>
+<option value="A8">A8</option><option value="A9">A9</option>
+<option value="AA">AA</option><option value="AB">AB</option>
+<option value="AC">AC</option><option value="AD">AD</option>
+<option value="AE">AE</option><option value="AF">AF</option>
+<option value="B0">B0</option><option value="B1">B1</option>
+<option value="B2">B2</option><option value="B3">B3</option>
+<option value="B4">B4</option><option value="B5">B5</option>
+<option value="B6">B6</option><option value="B7">B7</option>
+<option value="B8">B8</option><option value="B9">B9</option>
+<option value="BA">BA</option><option value="BB">BB</option>
+<option value="BC">BC</option><option value="BD">BD</option>
+<option value="BE">BE</option><option value="BF">BF</option>
+<option value="C0">C0</option><option value="C1">C1</option>
+<option value="C2">C2</option><option value="C3">C3</option>
+<option value="C4">C4</option><option value="C5">C5</option>
+<option value="C6">C6</option><option value="C7">C7</option>
+<option value="C8">C8</option><option value="C9">C9</option>
+<option value="CA">CA</option><option value="CB">CB</option>
+<option value="CC">CC</option><option value="CD">CD</option>
+<option value="CE">CE</option><option value="CF">CF</option>
+<option value="D0">D0</option><option value="D1">D1</option>
+<option value="D2">D2</option><option value="D3">D3</option>
+<option value="D4">D4</option><option value="D5">D5</option>
+<option value="D6">D6</option><option value="D7">D7</option>
+<option value="D8">D8</option><option value="D9">D9</option>
+<option value="DA">DA</option><option value="DB">DB</option>
+<option value="DC">DC</option><option value="DD">DD</option>
+<option value="DE">DE</option><option value="DF">DF</option>
+<option value="E0">E0</option><option value="E1">E1</option>
+<option value="E2">E2</option><option value="E3">E3</option>
+<option value="E4">E4</option><option value="E5">E5</option>
+<option value="E6">E6</option><option value="E7">E7</option>
+<option value="E8">E8</option><option value="E9">E9</option>
+<option value="EA">EA</option><option value="EB">EB</option>
+<option value="EC">EC</option><option value="ED">ED</option>
+<option value="EE">EE</option><option value="EF">EF</option>
+<option value="F0">F0</option><option value="F1">F1</option>
+<option value="F2">F2</option><option value="F3">F3</option>
+<option value="F4">F4</option><option value="F5">F5</option>
+<option value="F6">F6</option><option value="F7">F7</option>
+<option value="F8">F8</option><option value="F9">F9</option>
+<option value="FA">FA</option><option value="FB">FB</option>
+<option value="FC">FC</option><option value="FD">FD</option>
+<option value="FE">FE</option><option value="FF">FF</option>
+</select>. <input type="button" value="Generate" onclick=TilingChange()><br>
+<input type="button" value="Get default" onclick=loadTilingDefault()> of selected screen/column/row
 </body>
 </html>
